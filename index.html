@@ -10,6 +10,9 @@
 </head>
 <body>
 
+<!-- slow-moving glow backdrop, drawn continuously in script.js -->
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
 <!-- floating hearts live here, shared across both screens -->
 <div class="hearts-layer" id="heartsLayer" aria-hidden="true"></div>
 
@@ -41,6 +44,12 @@
 
 <!-- ================= MAIN SCREEN ================= -->
 <section class="screen main-screen" id="mainScreen">
+
+  <nav class="site-nav" id="siteHeader" aria-label="Message buttons">
+    <!-- filled in by header.js at load time — edit NAV_ITEMS in header.js
+         to add/remove/rename buttons, not this markup -->
+  </nav>
+
   <div class="frame">
 
     <!-- corner ornaments -->
@@ -48,13 +57,6 @@
     <span class="corner corner-tr"></span>
     <span class="corner corner-bl"></span>
     <span class="corner corner-br"></span>
-
-    <header class="frame-header" id="siteHeader">
-      <!-- filled in by header.js at load time — edit NAV_ITEMS in header.js
-           to add/remove/rename buttons, not this markup -->
-    </header>
-
-    <div class="frame-divider"></div>
 
     <main class="stage" id="stage">
       <p class="stage-idle" id="stageIdle">press the three buttons, in order, whenever you feel like it</p>
