@@ -34,7 +34,7 @@
 
   function renderHeader(currentKey) {
     return `
-      <a class="nav-brand" href="index.html">${BRAND.small} <em>${BRAND.big}</em></a>
+      <a class="nav-brand" href="main.html">${BRAND.small} <em>${BRAND.big}</em></a>
       <ul class="nav-links">
         ${NAV_ITEMS.map((item) => renderNavItem(item, currentKey)).join("")}
       </ul>
