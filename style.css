@@ -37,7 +37,7 @@ button {
 }
 
 button:focus-visible,
-.seal-button:focus-visible {
+.flower-button:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 4px;
 }
@@ -48,6 +48,18 @@ button:focus-visible,
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* =====================================================
+   MOVING BACKGROUND CANVAS
+===================================================== */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* =====================================================
@@ -101,8 +113,6 @@ button:focus-visible,
    INTRO SCREEN
 ===================================================== */
 .intro-screen {
-  background:
-    radial-gradient(circle at 50% 30%, var(--wine) 0%, var(--wine-deep) 70%);
   transition: opacity 0.9s var(--ease-soft), visibility 0.9s var(--ease-soft);
 }
 
@@ -270,7 +280,6 @@ button:focus-visible,
    MAIN SCREEN + FRAME
 ===================================================== */
 .main-screen {
-  background: radial-gradient(circle at 50% 20%, var(--wine) 0%, var(--wine-deep) 75%);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.9s var(--ease-soft) 0.15s, visibility 0.9s var(--ease-soft) 0.15s;
@@ -282,10 +291,107 @@ button:focus-visible,
   visibility: visible;
 }
 
+/* =====================================================
+   FLOATING PILL NAV
+===================================================== */
+.site-nav {
+  position: fixed;
+  top: 22px;
+  left: 50%;
+  z-index: 5;
+  width: min(760px, 92vw);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 26px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: rgba(247, 228, 234, 0.82);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.4);
+  opacity: 0;
+  transform: translate(-50%, -16px);
+  transition: opacity 0.6s var(--ease-soft) 0.25s, transform 0.6s var(--ease-soft) 0.25s;
+}
+
+.main-screen.is-visible .site-nav {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.nav-brand {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.nav-brand em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--rose);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 8px;
+}
+
+.nav-link {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(226, 138, 165, 0.14);
+  border: 1.5px solid var(--rose);
+  border-radius: 999px;
+  padding: 8px 16px;
+  transition: transform 0.25s var(--ease-soft), background 0.25s, color 0.25s, box-shadow 0.25s;
+}
+
+.nav-link:hover {
+  background: var(--rose);
+  color: var(--cream);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(226, 138, 165, 0.4);
+}
+
+.nav-link.is-active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--wine-deep);
+  transform: translateY(-2px) scale(1.06);
+}
+
+.nav-link.is-pulsing {
+  animation: btn-pop 0.4s var(--ease-soft);
+}
+
+@keyframes btn-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.18); }
+  100% { transform: scale(1.06); }
+}
+
 .frame {
   position: relative;
   width: min(920px, 94vw);
-  max-height: 88vh;
+  max-height: 78vh;
+  margin-top: 86px;
   background: linear-gradient(180deg, var(--blush) 0%, var(--cream) 100%);
   border: 1px solid var(--gold);
   border-radius: 4px;
@@ -317,84 +423,6 @@ button:focus-visible,
 .corner-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
 .corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
 .corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
-
-.frame-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.brand {
-  margin: 0;
-  font-family: var(--font-display);
-  color: var(--ink);
-  line-height: 1;
-}
-
-.brand-line { display: block; }
-
-.brand-line--small {
-  font-size: 20px;
-  font-style: italic;
-  font-weight: 500;
-  color: var(--rose);
-  letter-spacing: 0.05em;
-}
-
-.brand-line--big {
-  font-size: clamp(34px, 5vw, 54px);
-  font-weight: 600;
-}
-
-.word-nav {
-  display: flex;
-  gap: 10px;
-}
-
-.word-btn {
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  color: var(--ink);
-  background: rgba(226, 138, 165, 0.14);
-  border: 1.5px solid var(--rose);
-  border-radius: 999px;
-  padding: 10px 20px;
-  transition: transform 0.25s var(--ease-soft), background 0.25s, color 0.25s, box-shadow 0.25s;
-}
-
-.word-btn:hover {
-  background: var(--rose);
-  color: var(--cream);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(226, 138, 165, 0.4);
-}
-
-.word-btn.is-active {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--wine-deep);
-  transform: translateY(-2px) scale(1.06);
-}
-
-.word-btn.is-pulsing {
-  animation: btn-pop 0.4s var(--ease-soft);
-}
-
-@keyframes btn-pop {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.18); }
-  100% { transform: scale(1.06); }
-}
-
-.frame-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  opacity: 0.6;
-}
 
 .stage {
   position: relative;
@@ -439,7 +467,9 @@ button:focus-visible,
 
 /* small screens */
 @media (max-width: 560px) {
-  .frame-header { align-items: flex-start; }
-  .word-nav { width: 100%; justify-content: space-between; }
-  .word-btn { flex: 1; padding: 10px 0; text-align: center; }
+  .site-nav { flex-direction: column; align-items: stretch; border-radius: 22px; }
+  .nav-brand { text-align: center; }
+  .nav-links { width: 100%; justify-content: space-between; }
+  .nav-link { flex: 1; text-align: center; }
+  .frame { margin-top: 130px; }
 }
