@@ -497,12 +497,14 @@ button:focus-visible,
 
 .stage {
   position: relative;
-  min-height: 220px;
+  min-height: 260px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: clamp(28px, 8vw, 90px);
   text-align: center;
   padding: 12px 8px 4px;
+  flex-wrap: wrap;
 }
 
 .unlocked-message {
@@ -622,6 +624,81 @@ button:focus-visible,
   color: var(--cream);
   opacity: 0.6;
   font-size: 14px;
+}
+
+/* =====================================================
+   MUSIC DISC
+===================================================== */
+.disc-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.music-disc {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: radial-gradient(circle at 50% 50%, #2c2c2c 0%, #171717 55%, #060606 100%);
+  box-shadow: 0 14px 26px rgba(0,0,0,0.45);
+  transition: transform 0.3s var(--ease-soft);
+  animation: disc-spin 6s linear infinite;
+  animation-play-state: paused;
+}
+
+.music-disc:hover { transform: scale(1.03); }
+.music-disc:active { transform: scale(0.97); }
+
+.music-disc.is-playing { animation-play-state: running; }
+
+@keyframes disc-spin {
+  to { transform: rotate(360deg); }
+}
+
+.disc-grooves {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgba(255,255,255,0.05) 0px,
+    rgba(255,255,255,0.05) 1px,
+    transparent 1px,
+    transparent 6px
+  );
+}
+
+.disc-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--rose-soft) 0%, var(--rose) 100%);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+}
+
+.disc-hole {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cream);
 }
 
 /* =====================================================
@@ -808,6 +885,8 @@ button:focus-visible,
   .nav-links { width: 100%; justify-content: space-between; }
   .nav-link { flex: 1; text-align: center; padding: 8px 4px; }
   .frame { margin-top: 150px; }
+  .stage { flex-direction: column; gap: 32px; }
+  .music-disc { width: 160px; height: 160px; }
   .keypad { grid-template-columns: repeat(3, 52px); gap: 12px; }
   .keypad button { width: 52px; height: 52px; }
   .letter-page { padding-top: 110px; }
