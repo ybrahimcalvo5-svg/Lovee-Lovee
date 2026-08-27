@@ -86,43 +86,74 @@
     introHint.textContent = "unlocked ♥";
     heartLock.classList.add("is-unlocked");
 
-    // burst of sparkles from the heart's on-screen position
     const rect = heartLock.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    for (let i = 0; i < 26; i++) {
+
+    // small sparkle burst right at the heart itself
+    for (let i = 0; i < 20; i++) {
       setTimeout(() => window.Lovee.spawnBurst(centerX, centerY), i * 18);
     }
 
-    setTimeout(() => introContent.classList.add("is-opening"), 450);
+    // start the flower field now (not after the screen switch) and let a
+    // ripple of blooms expand outward from the heart — THIS is the
+    // transition into the main page, not just a background that appears
+    // after the fact
+    const flowerField = startFlowers();
+    if (flowerField) {
+      const maxRadius = Math.hypot(window.innerWidth, window.innerHeight) * 0.75;
+      const waveCount = 90;
+      for (let i = 0; i < waveCount; i++) {
+        const delay = i * 14; // spreads the ripple over ~1.25s
+        setTimeout(() => {
+          const angle = Math.random() * Math.PI * 2;
+          const progress = i / waveCount; // ring expands outward over time
+          const distance = progress * maxRadius + Math.random() * 60;
+          flowerField.spawnFlowerAt(
+            centerX + Math.cos(angle) * distance,
+            centerY + Math.sin(angle) * distance
+          );
+        }, delay);
+      }
+    }
+
+    // the intro card fades/scales away once the bloom is well underway,
+    // so the flowers are what's revealing the page underneath
+    setTimeout(() => introContent.classList.add("is-opening"), 550);
 
     setTimeout(() => {
       introScreen.classList.add("is-hidden");
       mainScreen.classList.add("is-visible");
-      startFlowers();
       const brand = document.querySelector(".nav-brand");
       if (brand) brand.focus({ preventScroll: true });
-    }, 900);
+    }, 1500);
   }
 
   /* =====================================================
-     INTERACTIVE BLOOMING FLOWERS (main-screen background)
+     INTERACTIVE BLOOMING FLOWERS
      ---------------------------------------------------
-     Starts once the heart is unlocked: flowers bloom in
-     on their own over time, and tapping/clicking anywhere
-     on the main screen plants another one right there.
+     Field is created the moment the heart unlocks (used
+     as the transition itself), then keeps blooming
+     ambiently and lets taps/clicks plant more, forever.
   ===================================================== */
+  let flowerFieldStarted = false;
   function startFlowers() {
+    if (flowerFieldStarted) return null;
+    flowerFieldStarted = true;
+
     const flowerField = window.Lovee.initFlowerField("flowersCanvas", {
       ambient: true,
       ambientInterval: 900,
-      maxFlowers: 60,
+      maxFlowers: 90,
     });
-    if (!flowerField) return;
+    if (!flowerField) return null;
 
-    mainScreen.addEventListener("click", (e) => {
+    document.addEventListener("click", (e) => {
       if (e.target.closest(".site-nav") || e.target.closest(".frame")) return;
+      if (e.target.closest(".keypad") || e.target.closest(".heart-lock")) return;
       flowerField.spawnFlowerAt(e.clientX, e.clientY);
     });
+
+    return flowerField;
   }
 })();
