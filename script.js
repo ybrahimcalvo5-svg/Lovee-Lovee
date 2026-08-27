@@ -7,6 +7,7 @@
      To change the passcode, edit CODE below.
   ===================================================== */
   const CODE = "5357";
+  const STORAGE_KEY = "loveeUnlocked";
   let entered = "";
   let unlocked = false;
 
@@ -19,6 +20,19 @@
   const keypad = document.getElementById("keypad");
 
   const DEFAULT_HINT = "enter the 4-digit code to unlock my heart";
+
+  // If the heart was already unlocked before (saved in this browser),
+  // skip the lock screen entirely and land straight on the main page.
+  function skipStraightToMain() {
+    unlocked = true;
+    introScreen.classList.add("is-hidden");
+    mainScreen.classList.add("is-visible");
+    startFlowers();
+  }
+
+  if (localStorage.getItem(STORAGE_KEY) === "true") {
+    skipStraightToMain();
+  }
 
   function updateDots() {
     dots.forEach((dot, i) => {
@@ -83,6 +97,7 @@
 
   function unlockHeart() {
     unlocked = true;
+    localStorage.setItem(STORAGE_KEY, "true");
     introHint.textContent = "unlocked ♥";
     heartLock.classList.add("is-unlocked");
 
