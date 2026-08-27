@@ -6,7 +6,7 @@
      ---------------------------------------------------
      Add, remove, or rename nav buttons HERE ONLY.
      Every page that includes this file (and has an
-     empty <header id="siteHeader"></header>) updates
+     empty <nav id="siteHeader"></nav>) updates
      automatically — nothing else to touch.
 
      Two kinds of entries:
@@ -30,20 +30,17 @@
 
   function renderNavItem(item) {
     if (item.href) {
-      return `<a class="word-btn" href="${item.href}">${item.label}</a>`;
+      return `<li><a class="nav-link" href="${item.href}">${item.label}</a></li>`;
     }
-    return `<button class="word-btn" data-word="${item.word}">${item.label}</button>`;
+    return `<li><button class="nav-link" data-word="${item.word}">${item.label}</button></li>`;
   }
 
   function renderHeader() {
     return `
-      <h1 class="brand">
-        <span class="brand-line brand-line--small">${BRAND.small}</span>
-        <span class="brand-line brand-line--big">${BRAND.big}</span>
-      </h1>
-      <nav class="word-nav" id="wordNav" aria-label="Message buttons">
+      <a class="nav-brand" href="#">${BRAND.small} <em>${BRAND.big}</em></a>
+      <ul class="nav-links">
         ${NAV_ITEMS.map(renderNavItem).join("")}
-      </nav>
+      </ul>
     `;
   }
 
