@@ -2,6 +2,85 @@
   "use strict";
 
   /* =====================================================
+     MOVING BACKGROUND
+     ---------------------------------------------------
+     A handful of soft, blurred color blobs drift slowly
+     and independently, giving the whole site a living,
+     breathing backdrop instead of a static gradient.
+  ===================================================== */
+  function initBackgroundCanvas() {
+    const canvas = document.getElementById("bgCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    let width, height;
+    let blobs = [];
+
+    const PALETTE = [
+      "rgba(226, 138, 165, 0.32)", // rose
+      "rgba(201, 154, 82, 0.24)",  // gold
+      "rgba(241, 185, 203, 0.28)", // rose-soft
+      "rgba(58, 20, 32, 0.55)",    // ink/wine, adds depth
+    ];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    function initBlobs() {
+      blobs = Array.from({ length: 6 }, (_, i) => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: 180 + Math.random() * 200,
+        color: PALETTE[i % PALETTE.length],
+        speedX: (Math.random() - 0.5) * 0.18,
+        speedY: (Math.random() - 0.5) * 0.18,
+        phase: Math.random() * Math.PI * 2,
+      }));
+    }
+
+    let t = 0;
+    function draw() {
+      t += 0.004;
+      ctx.fillStyle = "#1c0a13";
+      ctx.fillRect(0, 0, width, height);
+
+      blobs.forEach((b) => {
+        const x = b.x + Math.sin(t + b.phase) * 40;
+        const y = b.y + Math.cos(t * 0.8 + b.phase) * 30;
+
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, b.r);
+        gradient.addColorStop(0, b.color);
+        gradient.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x, y, b.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        b.x += b.speedX;
+        b.y += b.speedY;
+        if (b.x < -b.r) b.x = width + b.r;
+        if (b.x > width + b.r) b.x = -b.r;
+        if (b.y < -b.r) b.y = height + b.r;
+        if (b.y > height + b.r) b.y = -b.r;
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    initBlobs();
+    draw();
+    window.addEventListener("resize", () => {
+      resize();
+      initBlobs();
+    });
+  }
+
+  initBackgroundCanvas();
+
+  /* =====================================================
      FLOATING HEARTS BACKGROUND
   ===================================================== */
   const heartsLayer = document.getElementById("heartsLayer");
@@ -90,7 +169,7 @@
     setTimeout(() => {
       introScreen.classList.add("is-hidden");
       mainScreen.classList.add("is-visible");
-      const firstWordBtn = document.querySelector(".word-btn");
+      const firstWordBtn = document.querySelector(".nav-link[data-word]");
       if (firstWordBtn) firstWordBtn.focus({ preventScroll: true });
     }, 750);
   }
@@ -117,7 +196,7 @@
   let revealed = false;
 
   function initWordNav() {
-    const wordButtons = Array.from(document.querySelectorAll(".word-btn[data-word]"));
+    const wordButtons = Array.from(document.querySelectorAll(".nav-link[data-word]"));
 
     function resetSequence() {
       progress = 0;
