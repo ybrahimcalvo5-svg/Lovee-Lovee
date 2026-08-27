@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For my Love Love Angel Ann Obciana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-nav-key="">
+
+<!-- slow-moving glow backdrop, drawn continuously in background.js -->
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<!-- interactive blooming flowers, drawn in flowers.js once unlocked -->
+<canvas id="flowersCanvas" class="flowers-canvas" aria-hidden="true"></canvas>
+
+<!-- floating hearts live here, shared across every page -->
+<div class="hearts-layer" id="heartsLayer" aria-hidden="true"></div>
+
+<!-- ================= INTRO SCREEN ================= -->
+<section class="screen intro-screen" id="introScreen">
+  <div class="intro-content" id="introContent">
+    <p class="intro-brand">
+      <span class="intro-brand-line intro-brand-line--small">For my Love Love</span>
+      <span class="intro-brand-line intro-brand-line--big">Angel Ann Obciana</span>
+    </p>
+
+    <!-- heart-shaped lock: edit CODE in script.js to change the passcode -->
+    <div class="heart-lock" id="heartLock" aria-hidden="true">
+      <svg class="heart-lock-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path class="heart-shape"
+          d="M100,178 C100,178 20,128 20,74 C20,42 44,22 70,22 C86,22 96,32 100,42
+             C104,32 114,22 130,22 C156,22 180,42 180,74 C180,128 100,178 100,178 Z"/>
+        <g class="lock-icon">
+          <path class="lock-shackle" id="lockShackle" d="M84,90 v-14 a16,16 0 0 1 32,0 v14"/>
+          <rect class="lock-body" x="78" y="90" width="44" height="34" rx="6"/>
+          <circle class="lock-keyhole" cx="100" cy="104" r="4"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="passcode-dots" id="passcodeDots" aria-hidden="true">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+
+    <p class="intro-hint" id="introHint" aria-live="polite">enter the 4-digit code to unlock my heart</p>
+
+    <div class="keypad" id="keypad" role="group" aria-label="Passcode keypad">
+      <button type="button" data-key="1">1</button>
+      <button type="button" data-key="2">2</button>
+      <button type="button" data-key="3">3</button>
+      <button type="button" data-key="4">4</button>
+      <button type="button" data-key="5">5</button>
+      <button type="button" data-key="6">6</button>
+      <button type="button" data-key="7">7</button>
+      <button type="button" data-key="8">8</button>
+      <button type="button" data-key="9">9</button>
+      <span class="keypad-spacer" aria-hidden="true"></span>
+      <button type="button" data-key="0">0</button>
+      <button type="button" class="keypad-back" data-key="back" aria-label="Delete last digit">⌫</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MAIN SCREEN ================= -->
+<section class="screen main-screen" id="mainScreen">
+
+  <nav class="site-nav" id="siteHeader" aria-label="Message buttons">
+    <!-- filled in by header.js at load time — edit NAV_ITEMS in header.js
+         to add/remove/rename/re-link pages, not this markup -->
+  </nav>
+
+  <div class="frame">
+
+    <!-- corner ornaments -->
+    <span class="corner corner-tl"></span>
+    <span class="corner corner-tr"></span>
+    <span class="corner corner-bl"></span>
+    <span class="corner corner-br"></span>
+
+    <main class="stage" id="stage">
+      <div class="unlocked-message">
+        <p class="unlocked-title">You unlocked my heart ♥</p>
+        <p class="unlocked-hint">tap anywhere to plant a flower</p>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<script src="background.js"></script>
+<script src="flowers.js"></script>
+<script src="header.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
