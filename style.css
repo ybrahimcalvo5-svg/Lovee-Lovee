@@ -458,53 +458,25 @@ button:focus-visible,
   100% { transform: scale(1.06); }
 }
 
-.frame {
-  position: relative;
-  width: min(920px, 94vw);
-  max-height: 78vh;
-  margin-top: 96px;
-  background: linear-gradient(180deg, var(--blush) 0%, var(--cream) 100%);
-  border: 1px solid var(--gold);
-  border-radius: 4px;
-  box-shadow:
-    0 0 0 6px var(--wine-deep),
-    0 0 0 7px rgba(201, 154, 82, 0.5),
-    0 30px 60px rgba(0,0,0,0.5);
-  padding: 34px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  opacity: 0;
-  transform: translateY(18px);
-  animation: frame-rise 0.8s var(--ease-soft) 0.3s forwards;
-}
-
-@keyframes frame-rise {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.corner {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--gold);
-}
-
-.corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
-.corner-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
-.corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
-.corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
-
 .stage {
   position: relative;
-  min-height: 260px;
+  width: min(1300px, 94vw);
+  min-height: 60vh;
+  margin: 110px auto 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: clamp(20px, 6vw, 60px);
+  gap: clamp(24px, 8vw, 140px);
   text-align: center;
-  padding: 12px 20px 4px;
+  padding: 12px 2vw 4px;
   flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: stage-rise 0.8s var(--ease-soft) 0.3s forwards;
+}
+
+@keyframes stage-rise {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .unlocked-message {
@@ -552,25 +524,52 @@ button:focus-visible,
   border: none;
   background: transparent;
   cursor: pointer;
+  perspective: 700px;
   filter: drop-shadow(0 14px 24px rgba(0,0,0,0.35));
-  transition: transform 0.3s var(--ease-soft), opacity 0.4s var(--ease-soft);
+  transition: transform 0.3s var(--ease-soft), opacity 0.35s var(--ease-soft), scale 0.35s;
 }
 
 .envelope-button:hover { transform: translateY(-3px); }
 .envelope-button:active { transform: translateY(0); }
 
-/* outline only — no fill, so the page shows straight through it */
-.envelope-svg {
+/* the paper body of the envelope */
+.envelope-back {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--gold);
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--blush) 100%);
+  border: 2px solid var(--gold);
+}
+
+/* the folded-up front pocket, drawn as a V so it reads as an envelope */
+.envelope-pocket {
+  position: absolute;
+  inset: 0;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(160deg, var(--rose-soft) 0%, var(--rose) 100%);
+  clip-path: polygon(0% 100%, 50% 42%, 100% 100%);
+}
+
+/* the top flap — hinges open along its top edge when clicked */
+.envelope-flap {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(200deg, var(--rose) 0%, var(--rose-soft) 100%);
+  clip-path: polygon(0% 0%, 100% 0%, 50% 56%);
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  transition: transform 0.35s var(--ease-soft);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.envelope-button:hover .envelope-flap {
+  transform: rotateX(-10deg);
 }
 
 .envelope-heart {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 56px;
@@ -587,16 +586,22 @@ button:focus-visible,
   z-index: 2;
 }
 
-/* opening state: the whole envelope fades away as the letter takes over */
-.envelope-button.is-open {
-  opacity: 0;
-  transform: scale(0.94);
-  pointer-events: none;
+/* opening state: the flap hinges open first, then the whole envelope
+   fades away as the letter overlay takes over (see main.js openLetter) */
+.envelope-button.is-open .envelope-flap {
+  transform: rotateX(150deg);
 }
 
 .envelope-button.is-open .envelope-heart {
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
+}
+
+.envelope-button.is-open {
+  transition: opacity 0.35s var(--ease-soft) 0.3s, transform 0.35s var(--ease-soft) 0.3s;
+  opacity: 0;
+  transform: scale(0.94);
+  pointer-events: none;
 }
 
 .envelope-hint {
@@ -864,8 +869,8 @@ button:focus-visible,
   .site-nav { flex-direction: column; align-items: flex-start; padding: 16px 20px; }
   .nav-links { width: 100%; justify-content: space-between; }
   .nav-link { flex: 1; text-align: center; padding: 8px 4px; }
-  .frame { margin-top: 150px; }
-  .stage { flex-direction: column; gap: 32px; }
+  .stage { margin-top: 150px; flex-direction: column; gap: 32px; }
+  .envelope-button { width: 90vw; max-width: 380px; height: 62vw; max-height: 254px; }
   .music-disc { width: 160px; height: 160px; }
   .keypad { grid-template-columns: repeat(3, 52px); gap: 12px; }
   .keypad button { width: 52px; height: 52px; }
