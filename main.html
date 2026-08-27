@@ -27,42 +27,33 @@
          to add/remove/rename/re-link pages, not this markup -->
   </nav>
 
-  <div class="frame">
+  <main class="stage" id="stage">
+    <div class="envelope-wrap" id="envelopeWrap">
+      <p class="unlocked-title">You unlocked my heart ♥</p>
 
-    <!-- corner ornaments -->
-    <span class="corner corner-tl"></span>
-    <span class="corner corner-tr"></span>
-    <span class="corner corner-bl"></span>
-    <span class="corner corner-br"></span>
+      <!-- click to open: flap lifts, then the letter overlay shows the paper -->
+      <button type="button" class="envelope-button" id="envelopeButton" aria-haspopup="dialog">
+        <span class="envelope-back" aria-hidden="true"></span>
+        <span class="envelope-pocket" aria-hidden="true"></span>
+        <span class="envelope-flap" aria-hidden="true"></span>
+        <span class="envelope-heart" aria-hidden="true">♥</span>
+      </button>
 
-    <main class="stage" id="stage">
-      <div class="envelope-wrap" id="envelopeWrap">
-        <p class="unlocked-title">You unlocked my heart ♥</p>
+      <p class="unlocked-hint">tap the envelope to open my letter</p>
+    </div>
 
-        <!-- click to open: flap lifts, then the letter overlay shows the paper -->
-        <button type="button" class="envelope-button" id="envelopeButton" aria-haspopup="dialog">
-          <span class="envelope-back" aria-hidden="true"></span>
-          <span class="envelope-pocket" aria-hidden="true"></span>
-          <span class="envelope-flap" aria-hidden="true"></span>
-          <span class="envelope-heart" aria-hidden="true">♥</span>
-        </button>
+    <!-- spins while playing; click toggles play/pause. add your own
+         audio file and point bgMusic's src at it below -->
+    <div class="disc-wrap" id="discWrap">
+      <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
+        <span class="disc-grooves" aria-hidden="true"></span>
+        <span class="disc-label" aria-hidden="true">♪</span>
+        <span class="disc-hole" aria-hidden="true"></span>
+      </button>
+      <p class="unlocked-hint" id="discHint">tap the disc to play our song</p>
+    </div>
+  </main>
 
-        <p class="unlocked-hint">tap the envelope to open my letter</p>
-      </div>
-
-      <!-- spins while playing; click toggles play/pause. add your own
-           audio file and point bgMusic's src at it below -->
-      <div class="disc-wrap" id="discWrap">
-        <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
-          <span class="disc-grooves" aria-hidden="true"></span>
-          <span class="disc-label" aria-hidden="true">♪</span>
-          <span class="disc-hole" aria-hidden="true"></span>
-        </button>
-        <p class="unlocked-hint" id="discHint">tap the disc to play our song</p>
-      </div>
-    </main>
-
-  </div>
 </section>
 
 <!-- put your own audio file next to the html files and update src="" here -->
