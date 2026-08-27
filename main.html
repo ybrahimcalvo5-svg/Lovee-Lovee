@@ -49,10 +49,24 @@
 
         <p class="unlocked-hint">tap the envelope to open my letter</p>
       </div>
+
+      <!-- spins while playing; click toggles play/pause. add your own
+           audio file and point bgMusic's src at it below -->
+      <div class="disc-wrap" id="discWrap">
+        <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
+          <span class="disc-grooves" aria-hidden="true"></span>
+          <span class="disc-label" aria-hidden="true">♪</span>
+          <span class="disc-hole" aria-hidden="true"></span>
+        </button>
+        <p class="unlocked-hint" id="discHint">tap the disc to play our song</p>
+      </div>
     </main>
 
   </div>
 </section>
+
+<!-- put your own audio file next to the html files and update src="" here -->
+<audio id="bgMusic" src="song.mp3" loop preload="none"></audio>
 
 <!-- ================= LETTER OVERLAY ================= -->
 <!-- edit LETTER_TEXT in main.js to change what the letter says -->
