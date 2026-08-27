@@ -2,6 +2,38 @@
   "use strict";
 
   /* =====================================================
+     MUSIC DISC
+     ---------------------------------------------------
+     Add your own audio file next to the html files and
+     point bgMusic's src at it in main.html.
+  ===================================================== */
+  const musicDiscButton = document.getElementById("musicDiscButton");
+  const bgMusic = document.getElementById("bgMusic");
+  const discHint = document.getElementById("discHint");
+
+  if (musicDiscButton && bgMusic) {
+    musicDiscButton.addEventListener("click", (e) => {
+      e.stopPropagation(); // don't also plant a flower under it
+
+      if (bgMusic.paused) {
+        bgMusic.play().catch(() => {
+          if (discHint) discHint.textContent = "couldn't play — add song.mp3 next to your html files";
+        });
+        musicDiscButton.classList.add("is-playing");
+        musicDiscButton.setAttribute("aria-pressed", "true");
+        musicDiscButton.setAttribute("aria-label", "Pause our song");
+        if (discHint) discHint.textContent = "tap the disc to pause";
+      } else {
+        bgMusic.pause();
+        musicDiscButton.classList.remove("is-playing");
+        musicDiscButton.setAttribute("aria-pressed", "false");
+        musicDiscButton.setAttribute("aria-label", "Play our song");
+        if (discHint) discHint.textContent = "tap the disc to play our song";
+      }
+    });
+  }
+
+  /* =====================================================
      ENVELOPE + LETTER
      ---------------------------------------------------
      Edit LETTER_TEXT below to change what the letter says.
