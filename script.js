@@ -246,4 +246,105 @@
   }
 
   document.addEventListener("header:ready", initWordNav);
+
+  /* =====================================================
+     ENVELOPE -> LETTER
+     ---------------------------------------------------
+     Edit LETTER_TEXT below to write your own message.
+     Blank lines create paragraph breaks.
+  ===================================================== */
+  const LETTER_TEXT =
+`My Love,
+
+Every little thing about you makes my ordinary days feel like something worth writing about.
+
+I built this whole tiny corner of the internet just so you'd have proof, in pixels and code, of something I already know by heart.
+
+I love you, today and every single day after this one.
+
+— always yours`;
+
+  const envelopeButton = document.getElementById("envelopeButton");
+  const envelopeWrap = document.getElementById("envelopeWrap");
+  const letterOverlay = document.getElementById("letterOverlay");
+  const letterText = document.getElementById("letterText");
+  const letterCursor = document.getElementById("letterCursor");
+  const letterClose = document.getElementById("letterClose");
+
+  let typingTimer = null;
+
+  function typeLetter() {
+    let i = 0;
+    letterCursor.classList.remove("is-hidden");
+
+    function typeNext() {
+      if (i < LETTER_TEXT.length) {
+        // insert the next character just before the cursor node
+        letterText.insertBefore(
+          document.createTextNode(LETTER_TEXT[i]),
+          letterCursor
+        );
+        i++;
+
+        // small natural variance in pace; a little longer after punctuation
+        const prevChar = LETTER_TEXT[i - 1];
+        let delay = 18 + Math.random() * 28;
+        if (",.!—".includes(prevChar)) delay += 160;
+        if (prevChar === "\n") delay += 120;
+
+        typingTimer = setTimeout(typeNext, delay);
+      } else {
+        letterCursor.classList.add("is-hidden");
+      }
+    }
+
+    typeNext();
+  }
+
+  function resetLetterText() {
+    clearTimeout(typingTimer);
+    // remove everything except the cursor span
+    Array.from(letterText.childNodes).forEach((node) => {
+      if (node !== letterCursor) node.remove();
+    });
+  }
+
+  function openLetterOverlay() {
+    envelopeButton.classList.add("is-open");
+
+    setTimeout(() => {
+      envelopeWrap.classList.add("is-hidden");
+      letterOverlay.classList.add("is-visible");
+      letterOverlay.setAttribute("aria-hidden", "false");
+      resetLetterText();
+      typeLetter();
+      letterClose.focus({ preventScroll: true });
+    }, 500);
+  }
+
+  function closeLetterOverlay() {
+    letterOverlay.classList.remove("is-visible");
+    letterOverlay.setAttribute("aria-hidden", "true");
+    clearTimeout(typingTimer);
+    envelopeWrap.classList.remove("is-hidden");
+    envelopeButton.classList.remove("is-open");
+    envelopeButton.focus({ preventScroll: true });
+  }
+
+  if (envelopeButton) {
+    envelopeButton.addEventListener("click", openLetterOverlay);
+  }
+  if (letterClose) {
+    letterClose.addEventListener("click", closeLetterOverlay);
+  }
+  if (letterOverlay) {
+    letterOverlay.addEventListener("click", (e) => {
+      if (e.target === letterOverlay) closeLetterOverlay();
+    });
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && letterOverlay.classList.contains("is-visible")) {
+      closeLetterOverlay();
+    }
+  });
 })();
