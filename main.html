@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For my Love Love Angel Ann Obciana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Quicksand:wght@500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-nav-key="">
+
+<!-- slow-moving glow backdrop, drawn continuously in background.js -->
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<!-- interactive blooming flowers, drawn in flowers.js -->
+<canvas id="flowersCanvas" class="flowers-canvas" aria-hidden="true"></canvas>
+
+<!-- floating hearts live here, shared across every page -->
+<div class="hearts-layer" id="heartsLayer" aria-hidden="true"></div>
+
+<!-- ================= MAIN SCREEN ================= -->
+<section class="screen main-screen is-visible" id="mainScreen">
+
+  <nav class="site-nav" id="siteHeader" aria-label="Message buttons">
+    <!-- filled in by header.js at load time — edit NAV_ITEMS in header.js
+         to add/remove/rename/re-link pages, not this markup -->
+  </nav>
+
+  <div class="frame">
+
+    <!-- corner ornaments -->
+    <span class="corner corner-tl"></span>
+    <span class="corner corner-tr"></span>
+    <span class="corner corner-bl"></span>
+    <span class="corner corner-br"></span>
+
+    <main class="stage" id="stage">
+      <div class="envelope-wrap" id="envelopeWrap">
+        <p class="unlocked-title">You unlocked my heart ♥</p>
+
+        <!-- click to open: flap lifts, then the letter overlay shows the paper -->
+        <button type="button" class="envelope-button" id="envelopeButton" aria-haspopup="dialog">
+          <span class="envelope-back" aria-hidden="true"></span>
+          <span class="envelope-pocket" aria-hidden="true"></span>
+          <span class="envelope-flap" aria-hidden="true"></span>
+          <span class="envelope-heart" aria-hidden="true">♥</span>
+        </button>
+
+        <p class="unlocked-hint">tap the envelope to open my letter</p>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<!-- ================= LETTER OVERLAY ================= -->
+<!-- edit LETTER_TEXT in main.js to change what the letter says -->
+<div class="letter-overlay" id="letterOverlay">
+  <div class="letter-paper" id="letterPaper" role="dialog" aria-modal="true" aria-label="A letter for you">
+    <button type="button" class="letter-close" id="letterClose" aria-label="Close letter">&times;</button>
+    <p class="letter-text" id="letterText"><span id="letterTypedText"></span><span class="letter-cursor" id="letterCursor" aria-hidden="true"></span></p>
+  </div>
+</div>
+
+<script src="background.js"></script>
+<script src="flowers.js"></script>
+<script src="header.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
