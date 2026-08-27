@@ -146,7 +146,7 @@ Ybrahim ♥`;
 
     if (flowerField) {
       document.addEventListener("click", (e) => {
-        if (e.target.closest(".site-nav") || e.target.closest(".frame")) return;
+        if (e.target.closest(".site-nav")) return;
         flowerField.spawnFlowerAt(e.clientX, e.clientY);
       });
     }
