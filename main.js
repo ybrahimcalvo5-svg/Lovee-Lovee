@@ -1,88 +1,38 @@
 (() => {
   "use strict";
 
-/* =====================================================
-   MUSIC DISC & PLAYER CONTROLLER
-===================================================== */
-const musicDiscButton = document.getElementById("musicDiscButton");
-const bgMusic = document.getElementById("bgMusic");
-const discHint = document.getElementById("discHint");
-const seekBar = document.getElementById("seekBar");
-const currentTimeEl = document.getElementById("currentTime");
-const durationTimeEl = document.getElementById("durationTime");
-const loopBtn = document.getElementById("loopBtn");
+  /* =====================================================
+     MUSIC DISC
+     ---------------------------------------------------
+     Add your own audio file next to the html files and
+     point bgMusic's src at it in main.html.
+  ===================================================== */
+  const musicDiscButton = document.getElementById("musicDiscButton");
+  const bgMusic = document.getElementById("bgMusic");
+  const discHint = document.getElementById("discHint");
 
-function formatTime(seconds) {
-  if (isNaN(seconds)) return "0:00";
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-}
+  if (musicDiscButton && bgMusic) {
+    musicDiscButton.addEventListener("click", (e) => {
+      e.stopPropagation(); // don't also plant a flower under it
 
-if (musicDiscButton && bgMusic) {
-  // 1. Play / Pause Toggle via Disc
-  musicDiscButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-
-    if (bgMusic.paused) {
-      bgMusic.play().then(() => {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(() => {
+          if (discHint) discHint.textContent = "couldn't play — add song.mp3 next to your html files";
+        });
         musicDiscButton.classList.add("is-playing");
         musicDiscButton.setAttribute("aria-pressed", "true");
+        musicDiscButton.setAttribute("aria-label", "Pause our song");
         if (discHint) discHint.textContent = "tap the disc to pause";
-      }).catch(() => {
-        if (discHint) discHint.textContent = "couldn't play — check audio path";
-      });
-    } else {
-      bgMusic.pause();
-      musicDiscButton.classList.remove("is-playing");
-      musicDiscButton.setAttribute("aria-pressed", "false");
-      if (discHint) discHint.textContent = "tap the disc to play our song";
-    }
-  });
-
-  // 2. Update Seek Bar & Current Time Display
-  bgMusic.addEventListener("timeupdate", () => {
-    if (!isNaN(bgMusic.duration)) {
-      seekBar.value = bgMusic.currentTime;
-      seekBar.max = bgMusic.duration;
-      if (currentTimeEl) currentTimeEl.textContent = formatTime(bgMusic.currentTime);
-      if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
-    }
-  });
-
-  // 3. Scrub / Control Song Position
-  if (seekBar) {
-    seekBar.addEventListener("input", (e) => {
-      e.stopPropagation();
-      bgMusic.currentTime = seekBar.value;
-    });
-    seekBar.addEventListener("click", (e) => e.stopPropagation());
-  }
-
-  // 4. Toggle Repeat / Loop
-  if (loopBtn) {
-    loopBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      bgMusic.loop = !bgMusic.loop;
-      loopBtn.classList.toggle("is-active", bgMusic.loop);
+      } else {
+        bgMusic.pause();
+        musicDiscButton.classList.remove("is-playing");
+        musicDiscButton.setAttribute("aria-pressed", "false");
+        musicDiscButton.setAttribute("aria-label", "Play our song");
+        if (discHint) discHint.textContent = "tap the disc to play our song";
+      }
     });
   }
 
-  // 5. Autoplay On Main Screen Load (handles browser interaction policy)
-  const startAutoplay = () => {
-    bgMusic.play().then(() => {
-      musicDiscButton.classList.add("is-playing");
-      musicDiscButton.setAttribute("aria-pressed", "true");
-      if (discHint) discHint.textContent = "tap the disc to pause";
-    }).catch(() => {
-      // Browser blocked autoplay without user click; fallback to click prompt
-      if (discHint) discHint.textContent = "tap the disc to play our song";
-    });
-  };
-
-  // Trigger playback when user unlocks the main screen or clicks anywhere first
-  document.addEventListener("click", startAutoplay, { once: true });
-}
   /* =====================================================
      ENVELOPE + LETTER
      ---------------------------------------------------
