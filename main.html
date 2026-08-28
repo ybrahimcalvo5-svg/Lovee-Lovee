@@ -1,95 +1,207 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>For my Love Love Angel Ann Obciana</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Quicksand:wght@500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
+
 </head>
+
 <body data-nav-key="">
 
+
+
 <!-- slow-moving glow backdrop, drawn continuously in background.js -->
+
 <canvas id="bgCanvas" aria-hidden="true"></canvas>
 
+
+
 <!-- interactive blooming flowers, drawn in flowers.js -->
+
 <canvas id="flowersCanvas" class="flowers-canvas" aria-hidden="true"></canvas>
 
+
+
 <!-- floating hearts live here, shared across every page -->
+
 <div class="hearts-layer" id="heartsLayer" aria-hidden="true"></div>
 
+
+
 <!-- ================= MAIN SCREEN ================= -->
+
 <section class="screen main-screen is-visible" id="mainScreen">
 
+
+
   <nav class="site-nav" id="siteHeader" aria-label="Message buttons">
-    <!-- filled in by header.js at load time -->
+
+    <!-- filled in by header.js at load time — edit NAV_ITEMS in header.js
+
+         to add/remove/rename/re-link pages, not this markup -->
+
   </nav>
 
+
+
   <main class="stage" id="stage">
+
     <div class="envelope-wrap" id="envelopeWrap">
+
       <p class="unlocked-title">You unlocked my heart ♥</p>
 
+
+
       <!-- click to open: flap lifts, then the letter overlay shows the paper -->
+
       <button type="button" class="envelope-button" id="envelopeButton" aria-haspopup="dialog">
+
         <span class="envelope-back" aria-hidden="true"></span>
+
         <span class="envelope-pocket" aria-hidden="true"></span>
+
         <span class="envelope-flap" aria-hidden="true"></span>
+
         <span class="envelope-heart" aria-hidden="true">♥</span>
+
       </button>
 
+
+
       <p class="unlocked-hint">tap the envelope to open my letter</p>
+
     </div>
 
-    <!-- ================= MUSIC DISC & CONTROLLER ================= -->
-    <div class="disc-wrap" id="discWrap">
-      <div class="turntable-container">
-        <!-- Vinyl Tone Arm / Needle -->
-        <div class="tone-arm" id="toneArm" aria-hidden="true">
-          <div class="arm-pivot"></div>
-          <div class="arm-stick"></div>
-          <div class="arm-head"></div>
-        </div>
 
-        <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
-          <span class="disc-grooves" aria-hidden="true">
-            <span class="disc-label" aria-hidden="true">♪</span>
-            <span class="disc-hole" aria-hidden="true"></span>
-          </span>
-        </button>
-      </div>
 
-      <p class="unlocked-hint" id="discHint">tap the disc to play our song</p>
+ <!-- ================= MUSIC DISC & CONTROLLER ================= -->
 
-      <!-- AUDIO CONTROLLER -->
-      <div class="audio-controls" id="audioControls">
-        <div class="time-display">
-          <span id="currentTime">0:00</span> / <span id="durationTime">0:00</span>
-        </div>
-        <input type="range" id="seekBar" class="seek-bar" value="0" min="0" max="100" step="0.1" aria-label="Song progress">
-        <button type="button" id="loopBtn" class="control-btn is-active" aria-label="Toggle Loop" title="Loop Song">
-          🔁
-        </button>
-      </div>
+<div class="disc-wrap" id="discWrap">
+
+  <div class="turntable-container">
+
+    <!-- Vinyl Tone Arm / Needle -->
+
+    <div class="tone-arm" id="toneArm" aria-hidden="true">
+
+      <div class="arm-pivot"></div>
+
+      <div class="arm-stick"></div>
+
+      <div class="arm-head"></div>
+
     </div>
 
-    <!-- SINGLE AUDIO ELEMENT -->
-    <audio id="bgMusic" src="File Holder/Rex Orange County - AMAZING (Lyrics).mp3" loop preload="auto"></audio>
-  </main>
+
+
+    <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
+
+      <span class="disc-grooves" aria-hidden="true">
+
+        <span class="disc-label" aria-hidden="true">♪</span>
+
+        <span class="disc-hole" aria-hidden="true"></span>
+
+      </span>
+
+    </button>
+
+  </div>
+
+
+
+  <p class="unlocked-hint" id="discHint">tap the disc to play our song</p>
+
+
+
+  <!-- AUDIO CONTROLLER -->
+
+  <div class="audio-controls" id="audioControls">
+
+    <div class="time-display">
+
+      <span id="currentTime">0:00</span> / <span id="durationTime">0:00</span>
+
+    </div>
+
+    <input type="range" id="seekBar" class="seek-bar" value="0" min="0" max="100" step="0.1" aria-label="Song progress">
+
+    <button type="button" id="loopBtn" class="control-btn is-active" aria-label="Toggle Loop" title="Loop Song">
+
+      🔁
+
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<!-- AUDIO ELEMENT -->
+
+<audio id="bgMusic" src="File Holder/Rex Orange County - AMAZING (Lyrics).mp3" loop preload="auto"></audio>
+
+
 
 </section>
 
+
+
+<!-- AUDIO ELEMENT -->
+
+<audio id="bgMusic" src="File Holder/Rex Orange County - AMAZING (Lyrics).mp3" loop preload="auto" autoplay></audio>
+
+
+
+</section>
+
+
+
+<!-- put your own audio file next to the html files and update src="" here -->
+
+<audio id="bgMusic" src="song.mp3" loop preload="none"></audio>
+
+
+
 <!-- ================= LETTER OVERLAY ================= -->
+
+<!-- edit LETTER_TEXT in main.js to change what the letter says -->
+
 <div class="letter-overlay" id="letterOverlay">
+
   <div class="letter-paper" id="letterPaper" role="dialog" aria-modal="true" aria-label="A letter for you">
+
     <button type="button" class="letter-close" id="letterClose" aria-label="Close letter">&times;</button>
+
     <p class="letter-text" id="letterText"><span id="letterTypedText"></span><span class="letter-cursor" id="letterCursor" aria-hidden="true"></span></p>
+
   </div>
+
 </div>
 
+
+
 <script src="background.js"></script>
+
 <script src="flowers.js"></script>
+
 <script src="header.js"></script>
+
 <script src="main.js"></script>
+
 </body>
+
 </html>
