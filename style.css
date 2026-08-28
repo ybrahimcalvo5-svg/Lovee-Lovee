@@ -1,305 +1,305 @@
 /* =====================================================
-   TOKENS
+   TOKENS
 ===================================================== */
 :root {
-  --wine-deep:  #1C0A13;
-  --wine:       #2E1220;
-  --blush:      #F7E4EA;
-  --rose:       #E28AA5;
-  --rose-soft:  #F1B9CB;
-  --gold:       #C99A52;
-  --cream:      #FFF8F3;
-  --ink:        #3A1420;
+  --wine-deep:  #1C0A13;
+  --wine:       #2E1220;
+  --blush:      #F7E4EA;
+  --rose:       #E28AA5;
+  --rose-soft:  #F1B9CB;
+  --gold:       #C99A52;
+  --cream:      #FFF8F3;
+  --ink:        #3A1420;
 
-  --font-display: 'Cormorant Garamond', serif;
-  --font-body: 'Quicksand', sans-serif;
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body: 'Quicksand', sans-serif;
 
-  --ease-soft: cubic-bezier(.22, 1, .36, 1);
+  --ease-soft: cubic-bezier(.22, 1, .36, 1);
 }
 
 * { box-sizing: border-box; }
 
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--wine-deep);
-  font-family: var(--font-body);
-  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--wine-deep);
+  font-family: var(--font-body);
+  overflow: hidden;
 }
 
 button {
-  font-family: inherit;
-  cursor: pointer;
-  background: none;
-  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
 }
 
 button:focus-visible,
 .flower-button:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 4px;
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 
 /* =====================================================
-   MOVING BACKGROUND CANVAS
+   MOVING BACKGROUND CANVAS
 ===================================================== */
 #bgCanvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* =====================================================
-   INTERACTIVE BLOOMING FLOWERS
+   INTERACTIVE BLOOMING FLOWERS
 ===================================================== */
 .flowers-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* =====================================================
-   SHARED / FLOATING HEARTS
+   SHARED / FLOATING HEARTS
 ===================================================== */
 .hearts-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 2;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
 }
 
 .heart-particle {
-  position: absolute;
-  bottom: -40px;
-  color: var(--rose-soft);
-  opacity: 0.55;
-  font-size: 18px;
-  will-change: transform, opacity;
-  animation-name: float-up;
-  animation-timing-function: ease-in;
-  animation-fill-mode: forwards;
+  position: absolute;
+  bottom: -40px;
+  color: var(--rose-soft);
+  opacity: 0.55;
+  font-size: 18px;
+  will-change: transform, opacity;
+  animation-name: float-up;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
 }
 
 @keyframes float-up {
-  0% {
-    transform: translateY(0) translateX(0) rotate(0deg);
-    opacity: 0;
-  }
-  10% { opacity: 0.6; }
-  100% {
-    transform: translateY(-110vh) translateX(var(--drift, 20px)) rotate(25deg);
-    opacity: 0;
-  }
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 0.6; }
+  100% {
+    transform: translateY(-110vh) translateX(var(--drift, 20px)) rotate(25deg);
+    opacity: 0;
+  }
 }
 
 /* =====================================================
-   SCREENS
+   SCREENS
 ===================================================== */
 .screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 3;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
 }
 
 /* =====================================================
-   INTRO SCREEN
+   INTRO SCREEN
 ===================================================== */
 .intro-screen {
-  transition: opacity 0.9s var(--ease-soft), visibility 0.9s var(--ease-soft);
+  transition: opacity 0.9s var(--ease-soft), visibility 0.9s var(--ease-soft);
 }
 
 .intro-screen.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .intro-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 22px;
-  text-align: center;
-  transform: scale(1);
-  transition: transform 0.6s var(--ease-soft), opacity 0.6s var(--ease-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  text-align: center;
+  transform: scale(1);
+  transition: transform 0.6s var(--ease-soft), opacity 0.6s var(--ease-soft);
 }
 
 .intro-content.is-opening {
-  transform: scale(1.15);
-  opacity: 0;
+  transform: scale(1.15);
+  opacity: 0;
 }
 
 .intro-brand {
-  margin: 0;
-  text-align: center;
+  margin: 0;
+  text-align: center;
 }
 
 .intro-brand-line { display: block; }
 
 .intro-brand-line--small {
-  font-family: var(--font-body);
-  color: var(--rose-soft);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-size: 13px;
-  font-weight: 600;
+  font-family: var(--font-body);
+  color: var(--rose-soft);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .intro-brand-line--big {
-  margin-top: 6px;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  color: var(--cream);
-  font-size: clamp(28px, 5vw, 42px);
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--cream);
+  font-size: clamp(28px, 5vw, 42px);
 }
 
 /* =====================================================
-   HEART LOCK
+   HEART LOCK
 ===================================================== */
 .heart-lock {
-  position: relative;
-  width: 170px;
-  height: 170px;
-  filter: drop-shadow(0 10px 24px rgba(0,0,0,0.4));
-  animation: heart-breathe 3.2s ease-in-out infinite;
+  position: relative;
+  width: 170px;
+  height: 170px;
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,0.4));
+  animation: heart-breathe 3.2s ease-in-out infinite;
 }
 
 @keyframes heart-breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.035); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
 }
 
 .heart-lock-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 .heart-shape {
-  fill: var(--rose);
-  stroke: var(--rose-soft);
-  stroke-width: 1.5;
-  transition: fill 0.5s ease;
+  fill: var(--rose);
+  stroke: var(--rose-soft);
+  stroke-width: 1.5;
+  transition: fill 0.5s ease;
 }
 
 .lock-shackle {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 7;
-  stroke-linecap: round;
-  transform-origin: 84px 90px;
-  transition: transform 0.6s var(--ease-soft);
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 7;
+  stroke-linecap: round;
+  transform-origin: 84px 90px;
+  transition: transform 0.6s var(--ease-soft);
 }
 
 .lock-body {
-  fill: var(--cream);
-  stroke: var(--gold);
-  stroke-width: 2;
+  fill: var(--cream);
+  stroke: var(--gold);
+  stroke-width: 2;
 }
 
 .lock-keyhole { fill: var(--rose); }
 
 .heart-lock.is-shaking {
-  animation: lock-shake 0.5s var(--ease-soft);
+  animation: lock-shake 0.5s var(--ease-soft);
 }
 
 @keyframes lock-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-8px); }
-  40% { transform: translateX(7px); }
-  60% { transform: translateX(-5px); }
-  80% { transform: translateX(4px); }
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(4px); }
 }
 
 .heart-lock.is-unlocked .heart-shape {
-  fill: var(--gold);
+  fill: var(--gold);
 }
 
 .heart-lock.is-unlocked .lock-shackle {
-  transform: rotate(-35deg) translateX(-6px);
+  transform: rotate(-35deg) translateX(-6px);
 }
 
 .heart-lock.is-unlocked {
-  animation: heart-unlock-pop 0.7s var(--ease-soft) forwards;
+  animation: heart-unlock-pop 0.7s var(--ease-soft) forwards;
 }
 
 @keyframes heart-unlock-pop {
-  0%   { transform: scale(1); }
-  55%  { transform: scale(1.18); }
-  100% { transform: scale(1.08); }
+  0%   { transform: scale(1); }
+  55%  { transform: scale(1.18); }
+  100% { transform: scale(1.08); }
 }
 
 /* =====================================================
-   PASSCODE DOTS
+   PASSCODE DOTS
 ===================================================== */
 .passcode-dots {
-  display: flex;
-  gap: 16px;
+  display: flex;
+  gap: 16px;
 }
 
 .dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1.5px solid var(--gold);
-  background: transparent;
-  transition: background 0.25s var(--ease-soft), transform 0.25s var(--ease-soft);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  background: transparent;
+  transition: background 0.25s var(--ease-soft), transform 0.25s var(--ease-soft);
 }
 
 .dot.is-filled {
-  background: var(--rose);
-  transform: scale(1.15);
+  background: var(--rose);
+  transform: scale(1.15);
 }
 
 /* =====================================================
-   KEYPAD
+   KEYPAD
 ===================================================== */
 .keypad {
-  display: grid;
-  grid-template-columns: repeat(3, 56px);
-  gap: 14px;
-  margin-top: 4px;
+  display: grid;
+  grid-template-columns: repeat(3, 56px);
+  gap: 14px;
+  margin-top: 4px;
 }
 
 .keypad button {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(247, 228, 234, 0.35);
-  color: var(--cream);
-  font-family: var(--font-body);
-  font-size: 20px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(247, 228, 234, 0.35);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 
 .keypad button:hover {
-  background: rgba(226, 138, 165, 0.18);
-  border-color: var(--rose-soft);
+  background: rgba(226, 138, 165, 0.18);
+  border-color: var(--rose-soft);
 }
 
 .keypad button:active { transform: scale(0.92); }
@@ -310,240 +310,240 @@ button:focus-visible,
 
 /* particles that burst outward from the flower on click */
 .burst-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
 }
 
 .burst-particle {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  font-size: 20px;
-  opacity: 1;
-  color: var(--rose-soft);
-  animation: burst-fly 0.9s var(--ease-soft) forwards;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  opacity: 1;
+  color: var(--rose-soft);
+  animation: burst-fly 0.9s var(--ease-soft) forwards;
 }
 
 @keyframes burst-fly {
-  0% {
-    transform: translate(-50%, -50%) translate(0, 0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0.3);
-    opacity: 0;
-  }
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0.3);
+    opacity: 0;
+  }
 }
 
 /* full-screen flash when the flower field hits its bloom-explosion threshold */
 .bloom-flash {
-  position: fixed;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, rgba(247,228,234,0.55), rgba(226,138,165,0.25) 40%, transparent 75%);
-  opacity: 0;
-  animation: bloom-flash-pop 0.7s var(--ease-soft) forwards;
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, rgba(247,228,234,0.55), rgba(226,138,165,0.25) 40%, transparent 75%);
+  opacity: 0;
+  animation: bloom-flash-pop 0.7s var(--ease-soft) forwards;
 }
 
 @keyframes bloom-flash-pop {
-  0%   { opacity: 0; transform: scale(0.6); }
-  30%  { opacity: 1; }
-  100% { opacity: 0; transform: scale(1.5); }
+  0%   { opacity: 0; transform: scale(0.6); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.5); }
 }
 
 .intro-hint {
-  margin: 0;
-  color: var(--blush);
-  font-size: 14px;
-  opacity: 0.7;
-  animation: hint-pulse 2.4s ease-in-out infinite;
+  margin: 0;
+  color: var(--blush);
+  font-size: 14px;
+  opacity: 0.7;
+  animation: hint-pulse 2.4s ease-in-out infinite;
 }
 
 @keyframes hint-pulse {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 0.85; }
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
 }
 
 /* =====================================================
-   MAIN SCREEN + FRAME
+   MAIN SCREEN + FRAME
 ===================================================== */
 .main-screen {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.9s var(--ease-soft) 0.15s, visibility 0.9s var(--ease-soft) 0.15s;
-  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.9s var(--ease-soft) 0.15s, visibility 0.9s var(--ease-soft) 0.15s;
+  padding: 24px;
 }
 
 .main-screen.is-visible {
-  opacity: 1;
-  visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 /* =====================================================
-   FULL-WIDTH TOP NAV
+   FULL-WIDTH TOP NAV
 ===================================================== */
 .site-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  padding: 26px 48px;
-  border-bottom: 1.5px solid var(--gold);
-  background: transparent;
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.6s var(--ease-soft) 0.25s, transform 0.6s var(--ease-soft) 0.25s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 26px 48px;
+  border-bottom: 1.5px solid var(--gold);
+  background: transparent;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s var(--ease-soft) 0.25s, transform 0.6s var(--ease-soft) 0.25s;
 }
 
 /* on index.html the nav starts hidden and animates in once the heart unlocks */
 .main-screen .site-nav {
-  opacity: 0;
-  transform: translateY(-20px);
+  opacity: 0;
+  transform: translateY(-20px);
 }
 
 .main-screen.is-visible .site-nav {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .nav-brand {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  font-size: 24px;
-  color: var(--cream);
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--cream);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .nav-brand em {
-  font-style: italic;
-  color: var(--rose-soft);
+  font-style: italic;
+  color: var(--rose-soft);
 }
 
 .nav-links {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 28px;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 28px;
 }
 
 .nav-link {
-  display: inline-block;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--cream);
-  opacity: 0.65;
-  background: none;
-  border: none;
-  padding: 4px 0;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--cream);
+  opacity: 0.65;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  transition: color 0.2s ease, opacity 0.2s ease;
 }
 
 .nav-link:hover {
-  opacity: 1;
-  color: var(--rose-soft);
+  opacity: 1;
+  color: var(--rose-soft);
 }
 
 .nav-link.is-active,
 .nav-link.is-current {
-  opacity: 1;
-  color: var(--gold);
+  opacity: 1;
+  color: var(--gold);
 }
 
 .nav-link.is-pulsing {
-  animation: btn-pop 0.4s var(--ease-soft);
+  animation: btn-pop 0.4s var(--ease-soft);
 }
 
 @keyframes btn-pop {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.18); }
-  100% { transform: scale(1.06); }
+  0% { transform: scale(1); }
+  40% { transform: scale(1.18); }
+  100% { transform: scale(1.06); }
 }
 
 .stage {
-  position: relative;
-  width: min(1300px, 94vw);
-  min-height: 60vh;
-  margin: 110px auto 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(24px, 8vw, 140px);
-  text-align: center;
-  padding: 12px 2vw 4px;
-  flex-wrap: wrap;
-  opacity: 0;
-  transform: translateY(18px);
-  animation: stage-rise 0.8s var(--ease-soft) 0.3s forwards;
+  position: relative;
+  width: min(1300px, 94vw);
+  min-height: 60vh;
+  margin: 110px auto 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(24px, 8vw, 140px);
+  text-align: center;
+  padding: 12px 2vw 4px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: stage-rise 0.8s var(--ease-soft) 0.3s forwards;
 }
 
 @keyframes stage-rise {
-  to { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .unlocked-message {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
 }
 
 .unlocked-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  color: var(--rose);
-  font-size: clamp(26px, 4.4vw, 42px);
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--rose);
+  font-size: clamp(26px, 4.4vw, 42px);
 }
 
 .unlocked-hint {
-  margin: 0;
-  color: var(--blush);
-  opacity: 0.8;
-  font-size: 15px;
+  margin: 0;
+  color: var(--blush);
+  opacity: 0.8;
+  font-size: 15px;
 }
 
 .envelope-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .envelope-wrap.is-hidden {
-  opacity: 0;
-  transform: scale(0.94);
-  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.94);
+  pointer-events: none;
 }
 
 .envelope-button {
-  position: relative;
-  width: 420px;
-  height: 282px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  perspective: 700px;
-  filter: drop-shadow(0 14px 24px rgba(0,0,0,0.35));
-  transition: transform 0.3s var(--ease-soft), opacity 0.35s var(--ease-soft), scale 0.35s;
+  position: relative;
+  width: 420px;
+  height: 282px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  perspective: 700px;
+  filter: drop-shadow(0 14px 24px rgba(0,0,0,0.35));
+  transition: transform 0.3s var(--ease-soft), opacity 0.35s var(--ease-soft), scale 0.35s;
 }
 
 .envelope-button:hover { transform: translateY(-3px); }
@@ -551,474 +551,408 @@ button:focus-visible,
 
 /* the paper body of the envelope */
 .envelope-back {
-  position: absolute;
-  inset: 0;
-  border-radius: 10px;
-  background: linear-gradient(180deg, var(--cream) 0%, var(--blush) 100%);
-  border: 2px solid var(--gold);
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--blush) 100%);
+  border: 2px solid var(--gold);
 }
 
 /* the folded-up front pocket, drawn as a V so it reads as an envelope */
 .envelope-pocket {
-  position: absolute;
-  inset: 0;
-  border-radius: 0 0 10px 10px;
-  background: linear-gradient(160deg, var(--rose-soft) 0%, var(--rose) 100%);
-  clip-path: polygon(0% 100%, 50% 42%, 100% 100%);
+  position: absolute;
+  inset: 0;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(160deg, var(--rose-soft) 0%, var(--rose) 100%);
+  clip-path: polygon(0% 100%, 50% 42%, 100% 100%);
 }
 
 /* the top flap — hinges open along its top edge when clicked */
 .envelope-flap {
-  position: absolute;
-  inset: 0;
-  border-radius: 10px 10px 0 0;
-  background: linear-gradient(200deg, var(--rose) 0%, var(--rose-soft) 100%);
-  clip-path: polygon(0% 0%, 100% 0%, 50% 56%);
-  transform-origin: top center;
-  transform-style: preserve-3d;
-  transition: transform 0.35s var(--ease-soft);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  position: absolute;
+  inset: 0;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(200deg, var(--rose) 0%, var(--rose-soft) 100%);
+  clip-path: polygon(0% 0%, 100% 0%, 50% 56%);
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  transition: transform 0.35s var(--ease-soft);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .envelope-button:hover .envelope-flap {
-  transform: rotateX(-10deg);
+  transform: rotateX(-10deg);
 }
 
 .envelope-heart {
-  position: absolute;
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--gold);
-  color: var(--cream);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: transform 0.4s var(--ease-soft), opacity 0.4s var(--ease-soft);
-  z-index: 2;
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.4s var(--ease-soft), opacity 0.4s var(--ease-soft);
+  z-index: 2;
 }
 
 /* opening state: the flap hinges open first, then the whole envelope
-   fades away as the letter overlay takes over (see main.js openLetter) */
+   fades away as the letter overlay takes over (see main.js openLetter) */
 .envelope-button.is-open .envelope-flap {
-  transform: rotateX(150deg);
+  transform: rotateX(150deg);
 }
 
 .envelope-button.is-open .envelope-heart {
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
 }
 
 .envelope-button.is-open {
-  transition: opacity 0.35s var(--ease-soft) 0.3s, transform 0.35s var(--ease-soft) 0.3s;
-  opacity: 0;
-  transform: scale(0.94);
-  pointer-events: none;
+  transition: opacity 0.35s var(--ease-soft) 0.3s, transform 0.35s var(--ease-soft) 0.3s;
+  opacity: 0;
+  transform: scale(0.94);
+  pointer-events: none;
 }
 
 .envelope-hint {
-  margin: 0;
-  color: var(--cream);
-  opacity: 0.6;
-  font-size: 14px;
+  margin: 0;
+  color: var(--cream);
+  opacity: 0.6;
+  font-size: 14px;
 }
 
 /* =====================================================
-   MUSIC DISC & TURNTABLE
+   MUSIC DISC
 ===================================================== */
 .disc-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-.turntable-container {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
 /* Base button handles scaling and hover states safely */
 .music-disc {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  background: radial-gradient(circle at 50% 50%, #2c2c2c 0%, #171717 55%, #060606 100%);
-  box-shadow: 0 14px 26px rgba(0,0,0,0.45);
-  transition: transform 0.3s var(--ease-soft);
-  overflow: visible; /* CRITICAL FIX: allow needle to render outside button boundary */
+  position: relative;
+  width: 200px;
+  height: 200px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: radial-gradient(circle at 50% 50%, #2c2c2c 0%, #171717 55%, #060606 100%);
+  box-shadow: 0 14px 26px rgba(0,0,0,0.45);
+  transition: transform 0.3s var(--ease-soft);
 }
 
-.music-disc:hover { 
-  transform: scale(1.03); 
+.music-disc:hover { 
+  transform: scale(1.03); 
 }
 
-.music-disc:active { 
-  transform: scale(0.97); 
+.music-disc:active { 
+  transform: scale(0.97); 
 }
 
 /* Grooves and inner elements rotate cleanly on their center */
 .disc-grooves {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: repeating-radial-gradient(
-    circle at 50% 50%,
-    rgba(255,255,255,0.05) 0px,
-    rgba(255,255,255,0.05) 1px,
-    transparent 1px,
-    transparent 6px
-  );
-  transform-origin: center center;
-  animation: disc-spin 6s linear infinite;
-  animation-play-state: paused;
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgba(255,255,255,0.05) 0px,
+    rgba(255,255,255,0.05) 1px,
+    transparent 1px,
+    transparent 6px
+  );
+  transform-origin: center center;
+  animation: disc-spin 6s linear infinite;
+  animation-play-state: paused;
 }
 
-.music-disc.is-playing .disc-grooves { 
-  animation-play-state: running; 
+.music-disc.is-playing .disc-grooves { 
+  animation-play-state: running; 
 }
 
 @keyframes disc-spin {
-  from { 
-    transform: rotate(0deg); 
-  }
-  to { 
-    transform: rotate(360deg); 
-  }
+  from { 
+    transform: rotate(0deg); 
+  }
+  to { 
+    transform: rotate(360deg); 
+  }
 }
 
 .disc-label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: linear-gradient(160deg, var(--rose-soft) 0%, var(--rose) 100%);
-  color: var(--cream);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--rose-soft) 0%, var(--rose) 100%);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.35);
 }
 
 .disc-hole {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--cream);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cream);
 }
 
 /* =====================================================
-   TONE ARM NEEDLE
-===================================================== */
-.tone-arm {
-  position: absolute;
-  top: -25px;
-  right: -15px;
-  width: 50px;
-  height: 100px;
-  z-index: 20;
-  pointer-events: none;
-  transform-origin: 38px 12px;
-  transform: rotate(-35deg); /* Lifted off disc */
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.tone-arm.is-playing {
-  transform: rotate(0deg); /* Dropped onto disc edge */
-}
-
-.arm-pivot {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-}
-
-.arm-stick {
-  position: absolute;
-  top: 12px;
-  right: 11px;
-  width: 4px;
-  height: 75px;
-  background: linear-gradient(180deg, var(--gold) 0%, #a37936 100%);
-  border-radius: 2px;
-}
-
-.arm-head {
-  position: absolute;
-  bottom: 4px;
-  right: 5px;
-  width: 10px;
-  height: 16px;
-  background: var(--cream);
-  border-radius: 2px;
-  transform: rotate(15deg);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
-/* =====================================================
-   LETTER OVERLAY
+   LETTER OVERLAY
 ===================================================== */
 .letter-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(20, 7, 14, 0.72);
-  backdrop-filter: blur(6px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.45s var(--ease-soft), visibility 0.45s var(--ease-soft);
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(20, 7, 14, 0.72);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s var(--ease-soft), visibility 0.45s var(--ease-soft);
 }
 
 .letter-overlay.is-visible {
-  opacity: 1;
-  visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 .letter-paper {
-  position: relative;
-  width: min(560px, 100%);
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 46px 42px;
-  background:
-    repeating-linear-gradient(
-      var(--cream) 0px,
-      var(--cream) 37px,
-      rgba(201, 154, 82, 0.18) 38px
-    );
-  border: 1px solid var(--gold);
-  border-radius: 3px;
-  box-shadow: 0 30px 70px rgba(0,0,0,0.5);
-  transform: translateY(24px) scale(0.96);
-  opacity: 0;
-  transition: transform 0.5s var(--ease-soft), opacity 0.5s var(--ease-soft);
+  position: relative;
+  width: min(560px, 100%);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 46px 42px;
+  background:
+    repeating-linear-gradient(
+      var(--cream) 0px,
+      var(--cream) 37px,
+      rgba(201, 154, 82, 0.18) 38px
+    );
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+  transform: translateY(24px) scale(0.96);
+  opacity: 0;
+  transition: transform 0.5s var(--ease-soft), opacity 0.5s var(--ease-soft);
 }
 
 .letter-overlay.is-visible .letter-paper {
-  transform: translateY(0) scale(1);
-  opacity: 1;
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .letter-close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 26px;
-  line-height: 1;
-  color: var(--ink);
-  opacity: 0.45;
-  padding: 6px;
-  transition: opacity 0.2s ease;
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.45;
+  padding: 6px;
+  transition: opacity 0.2s ease;
 }
 
 .letter-close:hover { opacity: 0.9; }
 
 .letter-text {
-  margin: 0;
-  font-family: 'Caveat', cursive;
-  font-size: clamp(22px, 3.4vw, 28px);
-  line-height: 1.55;
-  color: var(--ink);
-  white-space: pre-wrap;
+  margin: 0;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(22px, 3.4vw, 28px);
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: pre-wrap;
 }
 
 .letter-cursor {
-  display: inline-block;
-  width: 2px;
-  height: 24px;
-  margin-left: 2px;
-  background: var(--rose);
-  vertical-align: text-bottom;
-  animation: cursor-blink 0.9s step-end infinite;
+  display: inline-block;
+  width: 2px;
+  height: 24px;
+  margin-left: 2px;
+  background: var(--rose);
+  vertical-align: text-bottom;
+  animation: cursor-blink 0.9s step-end infinite;
 }
 
 .letter-cursor.is-hidden { display: none; }
 
 @keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 .stage-message {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  color: var(--rose);
-  font-size: clamp(24px, 4vw, 40px);
-  opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 0.6s var(--ease-soft), transform 0.6s var(--ease-soft);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--rose);
+  font-size: clamp(24px, 4vw, 40px);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.6s var(--ease-soft), transform 0.6s var(--ease-soft);
 }
 
 .stage-message.is-visible {
-  opacity: 1;
-  transform: scale(1);
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* =====================================================
-   LETTER PAGES (I / LOVE / YOU)
+   LETTER PAGES (I / LOVE / YOU)
 ===================================================== */
 .letter-page {
-  position: fixed;
-  inset: 0;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
 }
 
 .letter-page-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
 }
 
 .letter-page-word {
-  margin: 0;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  color: var(--cream);
-  font-size: clamp(64px, 16vw, 180px);
-  line-height: 1;
-  opacity: 0;
-  transform: translateY(18px) scale(0.94);
-  transition: opacity 0.9s var(--ease-soft), transform 0.9s var(--ease-soft);
-  text-shadow: 0 0 40px rgba(226, 138, 165, 0.45);
-  animation: letter-glow 3.6s ease-in-out infinite;
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--cream);
+  font-size: clamp(64px, 16vw, 180px);
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(18px) scale(0.94);
+  transition: opacity 0.9s var(--ease-soft), transform 0.9s var(--ease-soft);
+  text-shadow: 0 0 40px rgba(226, 138, 165, 0.45);
+  animation: letter-glow 3.6s ease-in-out infinite;
 }
 
 .letter-page-word.is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 @keyframes letter-glow {
-  0%, 100% { text-shadow: 0 0 40px rgba(226, 138, 165, 0.45); }
-  50% { text-shadow: 0 0 64px rgba(201, 154, 82, 0.55); }
+  0%, 100% { text-shadow: 0 0 40px rgba(226, 138, 165, 0.45); }
+  50% { text-shadow: 0 0 64px rgba(201, 154, 82, 0.55); }
 }
 
 .letter-page-note {
-  margin: 0;
-  color: var(--blush);
-  opacity: 0.55;
-  font-size: 14px;
-  max-width: 340px;
+  margin: 0;
+  color: var(--blush);
+  opacity: 0.55;
+  font-size: 14px;
+  max-width: 340px;
 }
 
 .back-home {
-  margin-top: 8px;
-  color: var(--rose-soft);
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
-  opacity: 0.75;
-  transition: opacity 0.2s ease;
+  margin-top: 8px;
+  color: var(--rose-soft);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
 }
 
 .back-home:hover { opacity: 1; }
 
+/* small screens */
+@media (max-width: 560px) {
+  .site-nav { flex-direction: column; align-items: flex-start; padding: 16px 20px; }
+  .nav-links { width: 100%; justify-content: space-between; }
+  .nav-link { flex: 1; text-align: center; padding: 8px 4px; }
+  .stage { margin-top: 150px; flex-direction: column; gap: 32px; }
+  .envelope-button { width: 90vw; max-width: 380px; height: 62vw; max-height: 254px; }
+  .music-disc { width: 160px; height: 160px; }
+  .keypad { grid-template-columns: repeat(3, 52px); gap: 12px; }
+  .keypad button { width: 52px; height: 52px; }
+  .letter-page { padding-top: 110px; }
+}
 /* =====================================================
-   AUDIO CONTROLLER STYLES
+   AUDIO CONTROLLER STYLES
 ===================================================== */
 .audio-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(28, 10, 19, 0.75);
-  border: 1px solid var(--gold);
-  border-radius: 20px;
-  padding: 8px 16px;
-  backdrop-filter: blur(6px);
-  width: min(290px, 90vw);
-  margin-top: 8px;
-  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(28, 10, 19, 0.6);
+  border: 1px solid var(--gold);
+  border-radius: 20px;
+  padding: 8px 16px;
+  backdrop-filter: blur(4px);
+  width: min(280px, 90vw);
+  margin-top: 8px;
 }
 
 .time-display {
-  font-size: 12px;
-  color: var(--blush);
-  font-family: var(--font-body);
-  white-space: nowrap;
+  font-size: 12px;
+  color: var(--blush);
+  font-family: var(--font-body);
+  white-space: nowrap;
 }
 
 .seek-bar {
-  flex: 1;
-  accent-color: var(--rose);
-  cursor: pointer;
-  height: 4px;
+  flex: 1;
+  accent-color: var(--rose);
+  cursor: pointer;
+  height: 4px;
 }
 
 .control-btn {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  opacity: 0.4;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  padding: 0;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  padding: 0;
 }
 
 .control-btn.is-active {
-  opacity: 1;
-  transform: scale(1.1);
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 .control-btn:hover {
-  opacity: 0.8;
-}
-
-/* small screens */
-@media (max-width: 560px) {
-  .site-nav { flex-direction: column; align-items: flex-start; padding: 16px 20px; }
-  .nav-links { width: 100%; justify-content: space-between; }
-  .nav-link { flex: 1; text-align: center; padding: 8px 4px; }
-  .stage { margin-top: 150px; flex-direction: column; gap: 32px; }
-  .envelope-button { width: 90vw; max-width: 380px; height: 62vw; max-height: 254px; }
-  .music-disc { width: 160px; height: 160px; }
-  .turntable-container { width: 160px; height: 160px; }
-  .keypad { grid-template-columns: repeat(3, 52px); gap: 12px; }
-  .keypad button { width: 52px; height: 52px; }
-  .letter-page { padding-top: 110px; }
+  opacity: 0.8;
 }
