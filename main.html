@@ -23,8 +23,7 @@
 <section class="screen main-screen is-visible" id="mainScreen">
 
   <nav class="site-nav" id="siteHeader" aria-label="Message buttons">
-    <!-- filled in by header.js at load time — edit NAV_ITEMS in header.js
-         to add/remove/rename/re-link pages, not this markup -->
+    <!-- filled in by header.js at load time -->
   </nav>
 
   <main class="stage" id="stage">
@@ -42,53 +41,45 @@
       <p class="unlocked-hint">tap the envelope to open my letter</p>
     </div>
 
- <!-- ================= MUSIC DISC & CONTROLLER ================= -->
-<div class="disc-wrap" id="discWrap">
-  <div class="turntable-container">
-    <!-- Vinyl Tone Arm / Needle -->
-    <div class="tone-arm" id="toneArm" aria-hidden="true">
-      <div class="arm-pivot"></div>
-      <div class="arm-stick"></div>
-      <div class="arm-head"></div>
+    <!-- ================= MUSIC DISC & CONTROLLER ================= -->
+    <div class="disc-wrap" id="discWrap">
+      <div class="turntable-container">
+        <!-- Vinyl Tone Arm / Needle -->
+        <div class="tone-arm" id="toneArm" aria-hidden="true">
+          <div class="arm-pivot"></div>
+          <div class="arm-stick"></div>
+          <div class="arm-head"></div>
+        </div>
+
+        <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
+          <span class="disc-grooves" aria-hidden="true">
+            <span class="disc-label" aria-hidden="true">♪</span>
+            <span class="disc-hole" aria-hidden="true"></span>
+          </span>
+        </button>
+      </div>
+
+      <p class="unlocked-hint" id="discHint">tap the disc to play our song</p>
+
+      <!-- AUDIO CONTROLLER -->
+      <div class="audio-controls" id="audioControls">
+        <div class="time-display">
+          <span id="currentTime">0:00</span> / <span id="durationTime">0:00</span>
+        </div>
+        <input type="range" id="seekBar" class="seek-bar" value="0" min="0" max="100" step="0.1" aria-label="Song progress">
+        <button type="button" id="loopBtn" class="control-btn is-active" aria-label="Toggle Loop" title="Loop Song">
+          🔁
+        </button>
+      </div>
     </div>
 
-    <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
-      <span class="disc-grooves" aria-hidden="true">
-        <span class="disc-label" aria-hidden="true">♪</span>
-        <span class="disc-hole" aria-hidden="true"></span>
-      </span>
-    </button>
-  </div>
-
-  <p class="unlocked-hint" id="discHint">tap the disc to play our song</p>
-
-  <!-- AUDIO CONTROLLER -->
-  <div class="audio-controls" id="audioControls">
-    <div class="time-display">
-      <span id="currentTime">0:00</span> / <span id="durationTime">0:00</span>
-    </div>
-    <input type="range" id="seekBar" class="seek-bar" value="0" min="0" max="100" step="0.1" aria-label="Song progress">
-    <button type="button" id="loopBtn" class="control-btn is-active" aria-label="Toggle Loop" title="Loop Song">
-      🔁
-    </button>
-  </div>
-</div>
-
-<!-- AUDIO ELEMENT -->
-<audio id="bgMusic" src="File Holder/Rex Orange County - AMAZING (Lyrics).mp3" loop preload="auto"></audio>
+    <!-- SINGLE AUDIO ELEMENT -->
+    <audio id="bgMusic" src="File Holder/Rex Orange County - AMAZING (Lyrics).mp3" loop preload="auto"></audio>
+  </main>
 
 </section>
-
-<!-- AUDIO ELEMENT -->
-<audio id="bgMusic" src="File Holder/Rex Orange County - AMAZING (Lyrics).mp3" loop preload="auto" autoplay></audio>
-
-</section>
-
-<!-- put your own audio file next to the html files and update src="" here -->
-<audio id="bgMusic" src="song.mp3" loop preload="none"></audio>
 
 <!-- ================= LETTER OVERLAY ================= -->
-<!-- edit LETTER_TEXT in main.js to change what the letter says -->
 <div class="letter-overlay" id="letterOverlay">
   <div class="letter-paper" id="letterPaper" role="dialog" aria-modal="true" aria-label="A letter for you">
     <button type="button" class="letter-close" id="letterClose" aria-label="Close letter">&times;</button>
