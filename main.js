@@ -1,33 +1,81 @@
-(() => {
-  "use strict";
-
-  /* =====================================================
-     MUSIC DISC
+/* =====================================================
+     MUSIC DISC & PLAYER CONTROLLER
   ===================================================== */
   const musicDiscButton = document.getElementById("musicDiscButton");
   const bgMusic = document.getElementById("bgMusic");
   const discHint = document.getElementById("discHint");
+  const seekBar = document.getElementById("seekBar");
+  const currentTimeEl = document.getElementById("currentTime");
+  const durationTimeEl = document.getElementById("durationTime");
+  const loopBtn = document.getElementById("loopBtn");
+
+  function formatTime(seconds) {
+    if (isNaN(seconds)) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  }
 
   if (musicDiscButton && bgMusic) {
-    musicDiscButton.addEventListener("click", (e) => {
-      e.stopPropagation(); // don't also plant a flower under it
-
-      if (bgMusic.paused) {
-        bgMusic.play().catch(() => {
-          if (discHint) discHint.textContent = "couldn't play — add song.mp3 next to your html files";
-        });
+    const playAudio = () => {
+      bgMusic.play().then(() => {
         musicDiscButton.classList.add("is-playing");
         musicDiscButton.setAttribute("aria-pressed", "true");
-        musicDiscButton.setAttribute("aria-label", "Pause our song");
         if (discHint) discHint.textContent = "tap the disc to pause";
+      }).catch(() => {
+        if (discHint) discHint.textContent = "tap anywhere to play our song";
+      });
+    };
+
+    // 1. Attempt playback immediately upon landing on main.html
+    playAudio();
+
+    // 2. Backup trigger if browser blocks autoplay until user interaction
+    document.addEventListener("click", () => {
+      if (bgMusic.paused) playAudio();
+    }, { once: true });
+
+    // 3. Play / Pause Toggle via Disc
+    musicDiscButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      if (bgMusic.paused) {
+        playAudio();
       } else {
         bgMusic.pause();
         musicDiscButton.classList.remove("is-playing");
         musicDiscButton.setAttribute("aria-pressed", "false");
-        musicDiscButton.setAttribute("aria-label", "Play our song");
         if (discHint) discHint.textContent = "tap the disc to play our song";
       }
     });
+
+    // 4. Update seek bar and timestamp as song plays
+    bgMusic.addEventListener("timeupdate", () => {
+      if (!isNaN(bgMusic.duration)) {
+        seekBar.value = bgMusic.currentTime;
+        seekBar.max = bgMusic.duration;
+        if (currentTimeEl) currentTimeEl.textContent = formatTime(bgMusic.currentTime);
+        if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
+      }
+    });
+
+    // 5. Scrub/Seek location on the progress bar
+    if (seekBar) {
+      seekBar.addEventListener("input", (e) => {
+        e.stopPropagation();
+        bgMusic.currentTime = seekBar.value;
+      });
+      seekBar.addEventListener("click", (e) => e.stopPropagation());
+    }
+
+    // 6. Toggle Loop mode
+    if (loopBtn) {
+      loopBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        bgMusic.loop = !bgMusic.loop;
+        loopBtn.classList.toggle("is-active", bgMusic.loop);
+      });
+    }
   }
 
   /* =====================================================
