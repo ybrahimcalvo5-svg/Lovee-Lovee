@@ -1,85 +1,93 @@
+(() => {
+  "use strict";
+
 /* =====================================================
-     MUSIC DISC & PLAYER CONTROLLER
-  ===================================================== */
-  const musicDiscButton = document.getElementById("musicDiscButton");
-  const bgMusic = document.getElementById("bgMusic");
-  const discHint = document.getElementById("discHint");
-  const seekBar = document.getElementById("seekBar");
-  const currentTimeEl = document.getElementById("currentTime");
-  const durationTimeEl = document.getElementById("durationTime");
-  const loopBtn = document.getElementById("loopBtn");
+   MUSIC DISC & PLAYER CONTROLLER
+===================================================== */
+const musicDiscButton = document.getElementById("musicDiscButton");
+const bgMusic = document.getElementById("bgMusic");
+const discHint = document.getElementById("discHint");
+const seekBar = document.getElementById("seekBar");
+const currentTimeEl = document.getElementById("currentTime");
+const durationTimeEl = document.getElementById("durationTime");
+const loopBtn = document.getElementById("loopBtn");
 
-  function formatTime(seconds) {
-    if (isNaN(seconds)) return "0:00";
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  }
+function formatTime(seconds) {
+  if (isNaN(seconds)) return "0:00";
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+}
 
-  if (musicDiscButton && bgMusic) {
-    const playAudio = () => {
+if (musicDiscButton && bgMusic) {
+  // 1. Play / Pause Toggle via Disc
+  musicDiscButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (bgMusic.paused) {
       bgMusic.play().then(() => {
         musicDiscButton.classList.add("is-playing");
         musicDiscButton.setAttribute("aria-pressed", "true");
         if (discHint) discHint.textContent = "tap the disc to pause";
       }).catch(() => {
-        if (discHint) discHint.textContent = "tap anywhere to play our song";
+        if (discHint) discHint.textContent = "couldn't play — check audio path";
       });
-    };
+    } else {
+      bgMusic.pause();
+      musicDiscButton.classList.remove("is-playing");
+      musicDiscButton.setAttribute("aria-pressed", "false");
+      if (discHint) discHint.textContent = "tap the disc to play our song";
+    }
+  });
 
-    // 1. Attempt playback immediately upon landing on main.html
-    playAudio();
+  // 2. Update Seek Bar & Current Time Display
+  bgMusic.addEventListener("timeupdate", () => {
+    if (!isNaN(bgMusic.duration)) {
+      seekBar.value = bgMusic.currentTime;
+      seekBar.max = bgMusic.duration;
+      if (currentTimeEl) currentTimeEl.textContent = formatTime(bgMusic.currentTime);
+      if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
+    }
+  });
 
-    // 2. Backup trigger if browser blocks autoplay until user interaction
-    document.addEventListener("click", () => {
-      if (bgMusic.paused) playAudio();
-    }, { once: true });
-
-    // 3. Play / Pause Toggle via Disc
-    musicDiscButton.addEventListener("click", (e) => {
+  // 3. Scrub / Control Song Position
+  if (seekBar) {
+    seekBar.addEventListener("input", (e) => {
       e.stopPropagation();
-
-      if (bgMusic.paused) {
-        playAudio();
-      } else {
-        bgMusic.pause();
-        musicDiscButton.classList.remove("is-playing");
-        musicDiscButton.setAttribute("aria-pressed", "false");
-        if (discHint) discHint.textContent = "tap the disc to play our song";
-      }
+      bgMusic.currentTime = seekBar.value;
     });
-
-    // 4. Update seek bar and timestamp as song plays
-    bgMusic.addEventListener("timeupdate", () => {
-      if (!isNaN(bgMusic.duration)) {
-        seekBar.value = bgMusic.currentTime;
-        seekBar.max = bgMusic.duration;
-        if (currentTimeEl) currentTimeEl.textContent = formatTime(bgMusic.currentTime);
-        if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
-      }
-    });
-
-    // 5. Scrub/Seek location on the progress bar
-    if (seekBar) {
-      seekBar.addEventListener("input", (e) => {
-        e.stopPropagation();
-        bgMusic.currentTime = seekBar.value;
-      });
-      seekBar.addEventListener("click", (e) => e.stopPropagation());
-    }
-
-    // 6. Toggle Loop mode
-    if (loopBtn) {
-      loopBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        bgMusic.loop = !bgMusic.loop;
-        loopBtn.classList.toggle("is-active", bgMusic.loop);
-      });
-    }
+    seekBar.addEventListener("click", (e) => e.stopPropagation());
   }
 
+  // 4. Toggle Repeat / Loop
+  if (loopBtn) {
+    loopBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      bgMusic.loop = !bgMusic.loop;
+      loopBtn.classList.toggle("is-active", bgMusic.loop);
+    });
+  }
+
+  // 5. Autoplay On Main Screen Load (handles browser interaction policy)
+  const startAutoplay = () => {
+    bgMusic.play().then(() => {
+      musicDiscButton.classList.add("is-playing");
+      musicDiscButton.setAttribute("aria-pressed", "true");
+      if (discHint) discHint.textContent = "tap the disc to pause";
+    }).catch(() => {
+      // Browser blocked autoplay without user click; fallback to click prompt
+      if (discHint) discHint.textContent = "tap the disc to play our song";
+    });
+  };
+
+  // Trigger playback when user unlocks the main screen or clicks anywhere first
+  document.addEventListener("click", startAutoplay, { once: true });
+}
   /* =====================================================
      ENVELOPE + LETTER
+     ---------------------------------------------------
+     Edit LETTER_TEXT below to change what the letter says.
+     Use a blank line for a paragraph break.
   ===================================================== */
   const LETTER_TEXT =
 `My Love Love Angel Ann,
@@ -131,7 +139,8 @@ Ybrahim ♥`;
   function openLetter() {
     if (envelopeButton) envelopeButton.classList.add("is-open");
 
-    // let the flap-lift animation play first
+    // let the flap-lift animation play first, then bring in the blurred
+    // overlay with the paper sliding up and start the letter writing itself
     setTimeout(() => {
       if (letterOverlay) letterOverlay.classList.add("is-visible");
       if (!hasOpenedLetter) {
@@ -144,7 +153,11 @@ Ybrahim ♥`;
   function closeLetter() {
     if (letterOverlay) letterOverlay.classList.remove("is-visible");
 
-    // Restore envelope clickability after close animation finishes
+    // BUGFIX: opening the letter adds "is-open" to the envelope, which fades
+    // it out and disables clicks (pointer-events: none) so the flap can lift
+    // out of the way. That class was never removed on close, so the envelope
+    // stayed invisible/unclickable forever after the first open. Restore it
+    // once the overlay has finished fading out so it can be tapped again.
     if (envelopeButton) {
       setTimeout(() => {
         envelopeButton.classList.remove("is-open");
@@ -182,6 +195,10 @@ Ybrahim ♥`;
 
   /* =====================================================
      INTERACTIVE BLOOMING FLOWERS
+     ---------------------------------------------------
+     Blooms ambiently and lets taps/clicks plant more.
+     Keep clicking and, once enough flowers have been
+     hand-planted, the whole screen bursts into bloom.
   ===================================================== */
   const BLOOM_EXPLOSION_THRESHOLD = 15; // clicks needed to trigger the burst
   const BLOOM_EXPLOSION_GLYPHS = ["✿", "❀", "♥", "❤", "✦"];
