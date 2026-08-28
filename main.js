@@ -7,9 +7,10 @@
      Add your own audio file next to the html files and
      point bgMusic's src at it in main.html.
   ===================================================== */
-  const musicDiscButton = document.getElementById("musicDiscButton");
-  const bgMusic = document.getElementById("bgMusic");
-  const discHint = document.getElementById("discHint");
+ const musicDiscButton = document.getElementById("musicDiscButton");
+const bgMusic = document.getElementById("bgMusic");
+const discHint = document.getElementById("discHint");
+const loopBtn = document.getElementById("loopBtn");
 
   if (musicDiscButton && bgMusic) {
     musicDiscButton.addEventListener("click", (e) => {
@@ -32,6 +33,39 @@
       }
     });
   }
+    /* =====================================================
+   REPEAT / LOOP BUTTON
+===================================================== */
+
+if (loopBtn && bgMusic) {
+
+  // Start with repeat enabled
+  bgMusic.loop = true;
+  loopBtn.classList.add("is-active");
+  loopBtn.setAttribute("aria-pressed", "true");
+
+  loopBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    // Toggle loop
+    bgMusic.loop = !bgMusic.loop;
+
+    if (bgMusic.loop) {
+      // Repeat ON
+      loopBtn.classList.add("is-active");
+      loopBtn.setAttribute("aria-pressed", "true");
+      loopBtn.setAttribute("aria-label", "Repeat is on");
+      loopBtn.setAttribute("title", "Repeat: On");
+
+    } else {
+      // Repeat OFF
+      loopBtn.classList.remove("is-active");
+      loopBtn.setAttribute("aria-pressed", "false");
+      loopBtn.setAttribute("aria-label", "Repeat is off");
+      loopBtn.setAttribute("title", "Repeat: Off");
+    }
+  });
+}
 
   /* =====================================================
      ENVELOPE + LETTER
