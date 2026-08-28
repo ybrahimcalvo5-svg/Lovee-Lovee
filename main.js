@@ -2,7 +2,7 @@
   "use strict";
 
 /* =====================================================
-   MUSIC DISC & PLAYER CONTROLLER
+   MUSIC DISC, TONE ARM & AUDIO CONTROLLER
 ===================================================== */
 const musicDiscButton = document.getElementById("musicDiscButton");
 const bgMusic = document.getElementById("bgMusic");
@@ -11,34 +11,114 @@ const seekBar = document.getElementById("seekBar");
 const currentTimeEl = document.getElementById("currentTime");
 const durationTimeEl = document.getElementById("durationTime");
 const loopBtn = document.getElementById("loopBtn");
+const toneArm = document.getElementById("toneArm");
 
 function formatTime(seconds) {
-  if (isNaN(seconds)) return "0:00";
+  if (isNaN(seconds) || seconds < 0) return "0:00";
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 }
 
 if (musicDiscButton && bgMusic) {
-  // 1. Play / Pause Toggle via Disc
-  musicDiscButton.addEventListener("click", (e) => {
-    e.stopPropagation();
+  let isScrubbing = false;
 
-    if (bgMusic.paused) {
-      bgMusic.play().then(() => {
-        musicDiscButton.classList.add("is-playing");
-        musicDiscButton.setAttribute("aria-pressed", "true");
-        if (discHint) discHint.textContent = "tap the disc to pause";
-      }).catch(() => {
-        if (discHint) discHint.textContent = "couldn't play — check audio path";
-      });
+  const setPlayingState = (isPlaying) => {
+    if (isPlaying) {
+      musicDiscButton.classList.add("is-playing");
+      if (toneArm) toneArm.classList.add("is-playing");
+      musicDiscButton.setAttribute("aria-pressed", "true");
+      if (discHint) discHint.textContent = "tap the disc to pause";
     } else {
-      bgMusic.pause();
       musicDiscButton.classList.remove("is-playing");
+      if (toneArm) toneArm.classList.remove("is-playing");
       musicDiscButton.setAttribute("aria-pressed", "false");
       if (discHint) discHint.textContent = "tap the disc to play our song";
     }
+  };
+
+  const playAudio = () => {
+    bgMusic.play().then(() => {
+      setPlayingState(true);
+    }).catch(() => {
+      if (discHint) discHint.textContent = "tap anywhere to play our song";
+    });
+  };
+
+  // Auto-play attempt on page load
+  window.addEventListener("load", () => {
+    playAudio();
   });
+
+  // Backup play trigger on user interaction
+  document.addEventListener("click", () => {
+    if (bgMusic.paused) playAudio();
+  }, { once: true });
+
+  // Play / Pause toggle
+  musicDiscButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (bgMusic.paused) {
+      playAudio();
+    } else {
+      bgMusic.pause();
+      setPlayingState(false);
+    }
+  });
+
+  // Handle track ending (if loop is disabled)
+  bgMusic.addEventListener("ended", () => {
+    setPlayingState(false);
+  });
+
+  // Load duration when metadata is ready
+  bgMusic.addEventListener("loadedmetadata", () => {
+    if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
+    if (seekBar) seekBar.max = bgMusic.duration;
+  });
+
+  // Continuous progress update
+  bgMusic.addEventListener("timeupdate", () => {
+    if (!isNaN(bgMusic.duration) && bgMusic.duration > 0) {
+      if (!isScrubbing && seekBar) {
+        seekBar.value = bgMusic.currentTime;
+      }
+      if (currentTimeEl) currentTimeEl.textContent = formatTime(bgMusic.currentTime);
+      if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
+    }
+  });
+
+  // Seek bar functionality
+  if (seekBar) {
+    seekBar.addEventListener("mousedown", () => { isScrubbing = true; });
+    seekBar.addEventListener("touchstart", () => { isScrubbing = true; });
+
+    seekBar.addEventListener("input", (e) => {
+      e.stopPropagation();
+      if (currentTimeEl) currentTimeEl.textContent = formatTime(seekBar.value);
+    });
+
+    const finishSeeking = (e) => {
+      e.stopPropagation();
+      bgMusic.currentTime = parseFloat(seekBar.value);
+      isScrubbing = false;
+    };
+
+    seekBar.addEventListener("change", finishSeeking);
+    seekBar.addEventListener("mouseup", finishSeeking);
+    seekBar.addEventListener("touchend", finishSeeking);
+    seekBar.addEventListener("click", (e) => e.stopPropagation());
+  }
+
+  // Loop toggle
+  if (loopBtn) {
+    loopBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      bgMusic.loop = !bgMusic.loop;
+      loopBtn.classList.toggle("is-active", bgMusic.loop);
+    });
+  }
+}
 
   // 2. Update Seek Bar & Current Time Display
   bgMusic.addEventListener("timeupdate", () => {
