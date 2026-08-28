@@ -1,173 +1,127 @@
 (() => {
   "use strict";
 
-/* =====================================================
-   MUSIC DISC, TONE ARM & AUDIO CONTROLLER
-===================================================== */
-const musicDiscButton = document.getElementById("musicDiscButton");
-const bgMusic = document.getElementById("bgMusic");
-const discHint = document.getElementById("discHint");
-const seekBar = document.getElementById("seekBar");
-const currentTimeEl = document.getElementById("currentTime");
-const durationTimeEl = document.getElementById("durationTime");
-const loopBtn = document.getElementById("loopBtn");
-const toneArm = document.getElementById("toneArm");
+  /* =====================================================
+     MUSIC DISC, TONE ARM & AUDIO CONTROLLER
+  ===================================================== */
+  const musicDiscButton = document.getElementById("musicDiscButton");
+  const bgMusic = document.getElementById("bgMusic");
+  const discHint = document.getElementById("discHint");
+  const seekBar = document.getElementById("seekBar");
+  const currentTimeEl = document.getElementById("currentTime");
+  const durationTimeEl = document.getElementById("durationTime");
+  const loopBtn = document.getElementById("loopBtn");
+  const toneArm = document.getElementById("toneArm");
 
-function formatTime(seconds) {
-  if (isNaN(seconds) || seconds < 0) return "0:00";
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-}
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  }
 
-if (musicDiscButton && bgMusic) {
-  let isScrubbing = false;
+  if (musicDiscButton && bgMusic) {
+    let isScrubbing = false;
 
-  const setPlayingState = (isPlaying) => {
-    if (isPlaying) {
-      musicDiscButton.classList.add("is-playing");
-      if (toneArm) toneArm.classList.add("is-playing");
-      musicDiscButton.setAttribute("aria-pressed", "true");
-      if (discHint) discHint.textContent = "tap the disc to pause";
-    } else {
-      musicDiscButton.classList.remove("is-playing");
-      if (toneArm) toneArm.classList.remove("is-playing");
-      musicDiscButton.setAttribute("aria-pressed", "false");
-      if (discHint) discHint.textContent = "tap the disc to play our song";
-    }
-  };
-
-  const playAudio = () => {
-    bgMusic.play().then(() => {
-      setPlayingState(true);
-    }).catch(() => {
-      if (discHint) discHint.textContent = "tap anywhere to play our song";
-    });
-  };
-
-  // Auto-play attempt on page load
-  window.addEventListener("load", () => {
-    playAudio();
-  });
-
-  // Backup play trigger on user interaction
-  document.addEventListener("click", () => {
-    if (bgMusic.paused) playAudio();
-  }, { once: true });
-
-  // Play / Pause toggle
-  musicDiscButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (bgMusic.paused) {
-      playAudio();
-    } else {
-      bgMusic.pause();
-      setPlayingState(false);
-    }
-  });
-
-  // Handle track ending (if loop is disabled)
-  bgMusic.addEventListener("ended", () => {
-    setPlayingState(false);
-  });
-
-  // Load duration when metadata is ready
-  bgMusic.addEventListener("loadedmetadata", () => {
-    if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
-    if (seekBar) seekBar.max = bgMusic.duration;
-  });
-
-  // Continuous progress update
-  bgMusic.addEventListener("timeupdate", () => {
-    if (!isNaN(bgMusic.duration) && bgMusic.duration > 0) {
-      if (!isScrubbing && seekBar) {
-        seekBar.value = bgMusic.currentTime;
+    const setPlayingState = (isPlaying) => {
+      if (isPlaying) {
+        musicDiscButton.classList.add("is-playing");
+        if (toneArm) toneArm.classList.add("is-playing");
+        musicDiscButton.setAttribute("aria-pressed", "true");
+        if (discHint) discHint.textContent = "tap the disc to pause";
+      } else {
+        musicDiscButton.classList.remove("is-playing");
+        if (toneArm) toneArm.classList.remove("is-playing");
+        musicDiscButton.setAttribute("aria-pressed", "false");
+        if (discHint) discHint.textContent = "tap the disc to play our song";
       }
-      if (currentTimeEl) currentTimeEl.textContent = formatTime(bgMusic.currentTime);
-      if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
-    }
-  });
-
-  // Seek bar functionality
-  if (seekBar) {
-    seekBar.addEventListener("mousedown", () => { isScrubbing = true; });
-    seekBar.addEventListener("touchstart", () => { isScrubbing = true; });
-
-    seekBar.addEventListener("input", (e) => {
-      e.stopPropagation();
-      if (currentTimeEl) currentTimeEl.textContent = formatTime(seekBar.value);
-    });
-
-    const finishSeeking = (e) => {
-      e.stopPropagation();
-      bgMusic.currentTime = parseFloat(seekBar.value);
-      isScrubbing = false;
     };
 
-    seekBar.addEventListener("change", finishSeeking);
-    seekBar.addEventListener("mouseup", finishSeeking);
-    seekBar.addEventListener("touchend", finishSeeking);
-    seekBar.addEventListener("click", (e) => e.stopPropagation());
-  }
+    const playAudio = () => {
+      bgMusic.play().then(() => {
+        setPlayingState(true);
+      }).catch(() => {
+        if (discHint) discHint.textContent = "tap anywhere to play our song";
+      });
+    };
 
-  // Loop toggle
-  if (loopBtn) {
-    loopBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      bgMusic.loop = !bgMusic.loop;
-      loopBtn.classList.toggle("is-active", bgMusic.loop);
+    // Auto-play attempt on page load
+    window.addEventListener("load", () => {
+      playAudio();
     });
-  }
-}
 
-  // 2. Update Seek Bar & Current Time Display
-  bgMusic.addEventListener("timeupdate", () => {
-    if (!isNaN(bgMusic.duration)) {
-      seekBar.value = bgMusic.currentTime;
-      seekBar.max = bgMusic.duration;
-      if (currentTimeEl) currentTimeEl.textContent = formatTime(bgMusic.currentTime);
+    // Backup play trigger on user interaction
+    document.addEventListener("click", () => {
+      if (bgMusic.paused) playAudio();
+    }, { once: true });
+
+    // Play / Pause toggle
+    musicDiscButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (bgMusic.paused) {
+        playAudio();
+      } else {
+        bgMusic.pause();
+        setPlayingState(false);
+      }
+    });
+
+    // Handle track ending (if loop is disabled)
+    bgMusic.addEventListener("ended", () => {
+      setPlayingState(false);
+    });
+
+    // Load duration when metadata is ready
+    bgMusic.addEventListener("loadedmetadata", () => {
       if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
+      if (seekBar) seekBar.max = bgMusic.duration;
+    });
+
+    // Continuous progress update
+    bgMusic.addEventListener("timeupdate", () => {
+      if (!isNaN(bgMusic.duration) && bgMusic.duration > 0) {
+        if (!isScrubbing && seekBar) {
+          seekBar.value = bgMusic.currentTime;
+        }
+        if (currentTimeEl) currentTimeEl.textContent = formatTime(bgMusic.currentTime);
+        if (durationTimeEl) durationTimeEl.textContent = formatTime(bgMusic.duration);
+      }
+    });
+
+    // Seek bar functionality
+    if (seekBar) {
+      seekBar.addEventListener("mousedown", () => { isScrubbing = true; });
+      seekBar.addEventListener("touchstart", () => { isScrubbing = true; });
+
+      seekBar.addEventListener("input", (e) => {
+        e.stopPropagation();
+        if (currentTimeEl) currentTimeEl.textContent = formatTime(seekBar.value);
+      });
+
+      const finishSeeking = (e) => {
+        e.stopPropagation();
+        bgMusic.currentTime = parseFloat(seekBar.value);
+        isScrubbing = false;
+      };
+
+      seekBar.addEventListener("change", finishSeeking);
+      seekBar.addEventListener("mouseup", finishSeeking);
+      seekBar.addEventListener("touchend", finishSeeking);
+      seekBar.addEventListener("click", (e) => e.stopPropagation());
     }
-  });
 
-  // 3. Scrub / Control Song Position
-  if (seekBar) {
-    seekBar.addEventListener("input", (e) => {
-      e.stopPropagation();
-      bgMusic.currentTime = seekBar.value;
-    });
-    seekBar.addEventListener("click", (e) => e.stopPropagation());
+    // Loop toggle
+    if (loopBtn) {
+      loopBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        bgMusic.loop = !bgMusic.loop;
+        loopBtn.classList.toggle("is-active", bgMusic.loop);
+      });
+    }
   }
 
-  // 4. Toggle Repeat / Loop
-  if (loopBtn) {
-    loopBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      bgMusic.loop = !bgMusic.loop;
-      loopBtn.classList.toggle("is-active", bgMusic.loop);
-    });
-  }
-
-  // 5. Autoplay On Main Screen Load (handles browser interaction policy)
-  const startAutoplay = () => {
-    bgMusic.play().then(() => {
-      musicDiscButton.classList.add("is-playing");
-      musicDiscButton.setAttribute("aria-pressed", "true");
-      if (discHint) discHint.textContent = "tap the disc to pause";
-    }).catch(() => {
-      // Browser blocked autoplay without user click; fallback to click prompt
-      if (discHint) discHint.textContent = "tap the disc to play our song";
-    });
-  };
-
-  // Trigger playback when user unlocks the main screen or clicks anywhere first
-  document.addEventListener("click", startAutoplay, { once: true });
-}
   /* =====================================================
      ENVELOPE + LETTER
-     ---------------------------------------------------
-     Edit LETTER_TEXT below to change what the letter says.
-     Use a blank line for a paragraph break.
   ===================================================== */
   const LETTER_TEXT =
 `My Love Love Angel Ann,
@@ -195,16 +149,15 @@ Ybrahim ♥`;
 
   function typeLetter() {
     clearTimeout(typewriterTimer);
-    letterTypedText.textContent = "";
+    if (letterTypedText) letterTypedText.textContent = "";
     if (letterCursor) letterCursor.classList.remove("is-hidden");
 
     let i = 0;
     function step() {
       if (i < LETTER_TEXT.length) {
-        letterTypedText.textContent += LETTER_TEXT[i];
+        if (letterTypedText) letterTypedText.textContent += LETTER_TEXT[i];
         const justTyped = LETTER_TEXT[i];
         i++;
-        // small natural pause after punctuation/line breaks, quick otherwise
         let delay = 26 + Math.random() * 30;
         if (justTyped === "\n") delay = 260;
         else if (",.!?".includes(justTyped)) delay = 260;
@@ -219,8 +172,6 @@ Ybrahim ♥`;
   function openLetter() {
     if (envelopeButton) envelopeButton.classList.add("is-open");
 
-    // let the flap-lift animation play first, then bring in the blurred
-    // overlay with the paper sliding up and start the letter writing itself
     setTimeout(() => {
       if (letterOverlay) letterOverlay.classList.add("is-visible");
       if (!hasOpenedLetter) {
@@ -233,11 +184,6 @@ Ybrahim ♥`;
   function closeLetter() {
     if (letterOverlay) letterOverlay.classList.remove("is-visible");
 
-    // BUGFIX: opening the letter adds "is-open" to the envelope, which fades
-    // it out and disables clicks (pointer-events: none) so the flap can lift
-    // out of the way. That class was never removed on close, so the envelope
-    // stayed invisible/unclickable forever after the first open. Restore it
-    // once the overlay has finished fading out so it can be tapped again.
     if (envelopeButton) {
       setTimeout(() => {
         envelopeButton.classList.remove("is-open");
@@ -247,7 +193,7 @@ Ybrahim ♥`;
 
   if (envelopeButton) {
     envelopeButton.addEventListener("click", (e) => {
-      e.stopPropagation(); // don't also plant a flower under it
+      e.stopPropagation();
       openLetter();
     });
   }
@@ -260,7 +206,6 @@ Ybrahim ♥`;
   }
 
   if (letterOverlay) {
-    // click the dimmed backdrop (not the paper itself) to close
     letterOverlay.addEventListener("click", (e) => {
       e.stopPropagation();
       if (e.target === letterOverlay) closeLetter();
@@ -274,18 +219,13 @@ Ybrahim ♥`;
   });
 
   /* =====================================================
-     INTERACTIVE BLOOMING FLOWERS
-     ---------------------------------------------------
-     Blooms ambiently and lets taps/clicks plant more.
-     Keep clicking and, once enough flowers have been
-     hand-planted, the whole screen bursts into bloom.
+     INTERACTIVE BLOOMING FLOWERS & BURST
   ===================================================== */
-  const BLOOM_EXPLOSION_THRESHOLD = 15; // clicks needed to trigger the burst
+  const BLOOM_EXPLOSION_THRESHOLD = 15;
   const BLOOM_EXPLOSION_GLYPHS = ["✿", "❀", "♥", "❤", "✦"];
+  let clickedFlowerCount = 0;
 
   function triggerScreenBloomExplosion() {
-    if (!window.Lovee || !window.Lovee.spawnBurst) return;
-
     const w = window.innerWidth;
     const h = window.innerHeight;
     const particleCount = 70;
@@ -294,7 +234,9 @@ Ybrahim ♥`;
       setTimeout(() => {
         const x = Math.random() * w;
         const y = Math.random() * h;
-        window.Lovee.spawnBurst(x, y, BLOOM_EXPLOSION_GLYPHS);
+        if (window.Lovee && typeof window.Lovee.spawnBurst === 'function') {
+          window.Lovee.spawnBurst(x, y, BLOOM_EXPLOSION_GLYPHS);
+        }
       }, i * 12);
     }
 
@@ -304,26 +246,35 @@ Ybrahim ♥`;
     setTimeout(() => flash.remove(), 750);
   }
 
-  if (window.Lovee && window.Lovee.initFlowerField) {
-    const flowerField = window.Lovee.initFlowerField("flowersCanvas", {
+  // Initialize Flower Field supporting both window.flowerField and window.Lovee
+  let flowerInstance = null;
+  if (window.Lovee && typeof window.Lovee.initFlowerField === 'function') {
+    flowerInstance = window.Lovee.initFlowerField("flowersCanvas", {
       ambient: true,
       ambientInterval: 900,
       maxFlowers: 90,
     });
-
-    let clickedFlowerCount = 0;
-
-    if (flowerField) {
-      document.addEventListener("click", (e) => {
-        if (e.target.closest(".site-nav")) return;
-        flowerField.spawnFlowerAt(e.clientX, e.clientY);
-
-        clickedFlowerCount++;
-        if (clickedFlowerCount >= BLOOM_EXPLOSION_THRESHOLD) {
-          clickedFlowerCount = 0;
-          triggerScreenBloomExplosion();
-        }
-      });
-    }
+  } else if (window.flowerField) {
+    flowerInstance = window.flowerField;
   }
+
+  document.addEventListener("click", (e) => {
+    // Ignore clicks on controls, links, and text overlays
+    if (e.target.closest("button, a, input, .site-nav, .letter-overlay")) return;
+
+    // Spawn flower at click position
+    if (flowerInstance && typeof flowerInstance.spawnFlowerAt === 'function') {
+      flowerInstance.spawnFlowerAt(e.clientX, e.clientY);
+    } else if (window.flowerField && typeof window.flowerField.spawnFlowerAt === 'function') {
+      window.flowerField.spawnFlowerAt(e.clientX, e.clientY);
+    }
+
+    // Handle Flower Burst Counter
+    clickedFlowerCount++;
+    if (clickedFlowerCount >= BLOOM_EXPLOSION_THRESHOLD) {
+      clickedFlowerCount = 0;
+      triggerScreenBloomExplosion();
+    }
+  });
+
 })();
