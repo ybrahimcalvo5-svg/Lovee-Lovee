@@ -415,46 +415,9 @@ Ybrahim ♥`;
     let clickedFlowerCount = 0;
 
     if (flowerField) {
-     document.addEventListener("click", (e) => {
-
-  /*
-     Don't plant flowers when interacting
-     with actual UI controls.
-  */
-
-  if (
-    e.target.closest(".site-nav") ||
-    e.target.closest("#audioControls") ||
-    e.target.closest("#musicDiscButton") ||
-    e.target.closest("#envelopeButton") ||
-    e.target.closest(".letter-overlay") ||
-    e.target.closest("button") ||
-    e.target.closest("input")
-  ) {
-    return;
-  }
-
-
-  flowerField.spawnFlowerAt(
-    e.clientX,
-    e.clientY
-  );
-
-
-  clickedFlowerCount++;
-
-  if (
-    clickedFlowerCount >=
-    BLOOM_EXPLOSION_THRESHOLD
-  ) {
-
-    clickedFlowerCount = 0;
-
-    triggerScreenBloomExplosion();
-
-  }
-
-});
+      document.addEventListener("click", (e) => {
+        if (e.target.closest(".site-nav")) return;
+        flowerField.spawnFlowerAt(e.clientX, e.clientY);
 
         clickedFlowerCount++;
         if (clickedFlowerCount >= BLOOM_EXPLOSION_THRESHOLD) {
