@@ -102,6 +102,17 @@ Ybrahim ♥`;
 
   function closeLetter() {
     if (letterOverlay) letterOverlay.classList.remove("is-visible");
+
+    // BUGFIX: opening the letter adds "is-open" to the envelope, which fades
+    // it out and disables clicks (pointer-events: none) so the flap can lift
+    // out of the way. That class was never removed on close, so the envelope
+    // stayed invisible/unclickable forever after the first open. Restore it
+    // once the overlay has finished fading out so it can be tapped again.
+    if (envelopeButton) {
+      setTimeout(() => {
+        envelopeButton.classList.remove("is-open");
+      }, 450);
+    }
   }
 
   if (envelopeButton) {
@@ -136,7 +147,33 @@ Ybrahim ♥`;
      INTERACTIVE BLOOMING FLOWERS
      ---------------------------------------------------
      Blooms ambiently and lets taps/clicks plant more.
+     Keep clicking and, once enough flowers have been
+     hand-planted, the whole screen bursts into bloom.
   ===================================================== */
+  const BLOOM_EXPLOSION_THRESHOLD = 15; // clicks needed to trigger the burst
+  const BLOOM_EXPLOSION_GLYPHS = ["✿", "❀", "♥", "❤", "✦"];
+
+  function triggerScreenBloomExplosion() {
+    if (!window.Lovee || !window.Lovee.spawnBurst) return;
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const particleCount = 70;
+
+    for (let i = 0; i < particleCount; i++) {
+      setTimeout(() => {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        window.Lovee.spawnBurst(x, y, BLOOM_EXPLOSION_GLYPHS);
+      }, i * 12);
+    }
+
+    const flash = document.createElement("div");
+    flash.className = "bloom-flash";
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 750);
+  }
+
   if (window.Lovee && window.Lovee.initFlowerField) {
     const flowerField = window.Lovee.initFlowerField("flowersCanvas", {
       ambient: true,
@@ -144,10 +181,18 @@ Ybrahim ♥`;
       maxFlowers: 90,
     });
 
+    let clickedFlowerCount = 0;
+
     if (flowerField) {
       document.addEventListener("click", (e) => {
         if (e.target.closest(".site-nav")) return;
         flowerField.spawnFlowerAt(e.clientX, e.clientY);
+
+        clickedFlowerCount++;
+        if (clickedFlowerCount >= BLOOM_EXPLOSION_THRESHOLD) {
+          clickedFlowerCount = 0;
+          triggerScreenBloomExplosion();
+        }
       });
     }
   }
