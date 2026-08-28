@@ -638,7 +638,6 @@ button:focus-visible,
   gap: 16px;
 }
 
-/* Base button handles scaling and hover states safely */
 .music-disc {
   position: relative;
   width: 200px;
@@ -650,21 +649,22 @@ button:focus-visible,
   background: radial-gradient(circle at 50% 50%, #2c2c2c 0%, #171717 55%, #060606 100%);
   box-shadow: 0 14px 26px rgba(0,0,0,0.45);
   transition: transform 0.3s var(--ease-soft);
-  overflow: hidden;
+  animation: disc-spin 6s linear infinite;
+  animation-play-state: paused;
 }
 
-.music-disc:hover { 
-  transform: scale(1.03); 
+.music-disc:hover { transform: scale(1.03); }
+.music-disc:active { transform: scale(0.97); }
+
+.music-disc.is-playing { animation-play-state: running; }
+
+@keyframes disc-spin {
+  to { transform: rotate(360deg); }
 }
 
-.music-disc:active { 
-  transform: scale(0.97); 
-}
-
-/* Grooves and inner elements rotate cleanly on their center */
 .disc-grooves {
   position: absolute;
-  inset: 0;
+  inset: 12px;
   border-radius: 50%;
   background: repeating-radial-gradient(
     circle at 50% 50%,
@@ -673,22 +673,6 @@ button:focus-visible,
     transparent 1px,
     transparent 6px
   );
-  transform-origin: center center;
-  animation: disc-spin 6s linear infinite;
-  animation-play-state: paused;
-}
-
-.music-disc.is-playing .disc-grooves { 
-  animation-play-state: running; 
-}
-
-@keyframes disc-spin {
-  from { 
-    transform: rotate(0deg); 
-  }
-  to { 
-    transform: rotate(360deg); 
-  }
 }
 
 .disc-label {
