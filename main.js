@@ -1,70 +1,267 @@
 (() => {
   "use strict";
 
-  /* =====================================================
-     MUSIC DISC
-     ---------------------------------------------------
-     Add your own audio file next to the html files and
-     point bgMusic's src at it in main.html.
-  ===================================================== */
- const musicDiscButton = document.getElementById("musicDiscButton");
+ /* =====================================================
+   MUSIC PLAYER
+===================================================== */
+
+const musicDiscButton = document.getElementById("musicDiscButton");
 const bgMusic = document.getElementById("bgMusic");
 const discHint = document.getElementById("discHint");
+
+const seekBar = document.getElementById("seekBar");
+const currentTime = document.getElementById("currentTime");
+const durationTime = document.getElementById("durationTime");
 const loopBtn = document.getElementById("loopBtn");
 
-  if (musicDiscButton && bgMusic) {
-    musicDiscButton.addEventListener("click", (e) => {
-      e.stopPropagation(); // don't also plant a flower under it
 
-      if (bgMusic.paused) {
-        bgMusic.play().catch(() => {
-          if (discHint) discHint.textContent = "couldn't play — add song.mp3 next to your html files";
+/* =====================================================
+   PLAY / PAUSE DISC
+===================================================== */
+
+if (musicDiscButton && bgMusic) {
+
+  musicDiscButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (bgMusic.paused) {
+
+      bgMusic.play()
+        .then(() => {
+          musicDiscButton.classList.add("is-playing");
+          musicDiscButton.setAttribute("aria-pressed", "true");
+          musicDiscButton.setAttribute(
+            "aria-label",
+            "Pause our song"
+          );
+
+          if (discHint) {
+            discHint.textContent = "tap the disc to pause";
+          }
+        })
+        .catch(() => {
+          if (discHint) {
+            discHint.textContent =
+              "tap the disc to play our song";
+          }
         });
-        musicDiscButton.classList.add("is-playing");
-        musicDiscButton.setAttribute("aria-pressed", "true");
-        musicDiscButton.setAttribute("aria-label", "Pause our song");
-        if (discHint) discHint.textContent = "tap the disc to pause";
-      } else {
-        bgMusic.pause();
-        musicDiscButton.classList.remove("is-playing");
-        musicDiscButton.setAttribute("aria-pressed", "false");
-        musicDiscButton.setAttribute("aria-label", "Play our song");
-        if (discHint) discHint.textContent = "tap the disc to play our song";
+
+    } else {
+
+      bgMusic.pause();
+
+      musicDiscButton.classList.remove("is-playing");
+
+      musicDiscButton.setAttribute(
+        "aria-pressed",
+        "false"
+      );
+
+      musicDiscButton.setAttribute(
+        "aria-label",
+        "Play our song"
+      );
+
+      if (discHint) {
+        discHint.textContent =
+          "tap the disc to play our song";
       }
-    });
+    }
+  });
+
+
+  /* Keep disc animation synced with the actual audio */
+  bgMusic.addEventListener("play", () => {
+    musicDiscButton.classList.add("is-playing");
+
+    musicDiscButton.setAttribute(
+      "aria-pressed",
+      "true"
+    );
+
+    musicDiscButton.setAttribute(
+      "aria-label",
+      "Pause our song"
+    );
+
+    if (discHint) {
+      discHint.textContent =
+        "tap the disc to pause";
+    }
+  });
+
+
+  bgMusic.addEventListener("pause", () => {
+    musicDiscButton.classList.remove("is-playing");
+
+    musicDiscButton.setAttribute(
+      "aria-pressed",
+      "false"
+    );
+
+    musicDiscButton.setAttribute(
+      "aria-label",
+      "Play our song"
+    );
+
+    if (discHint) {
+      discHint.textContent =
+        "tap the disc to play our song";
+    }
+  });
+
+}
+
+
+/* =====================================================
+   TIME DISPLAY
+===================================================== */
+
+function formatTime(seconds) {
+
+  if (!Number.isFinite(seconds)) {
+    return "0:00";
   }
-    /* =====================================================
-   REPEAT / LOOP BUTTON
+
+  const minutes = Math.floor(seconds / 60);
+
+  const secs = Math.floor(seconds % 60)
+    .toString()
+    .padStart(2, "0");
+
+  return `${minutes}:${secs}`;
+}
+
+
+if (bgMusic) {
+
+  bgMusic.addEventListener("loadedmetadata", () => {
+
+    if (durationTime) {
+      durationTime.textContent =
+        formatTime(bgMusic.duration);
+    }
+
+    if (seekBar) {
+      seekBar.max = bgMusic.duration;
+    }
+
+  });
+
+
+  /* Update timer while song plays */
+  bgMusic.addEventListener("timeupdate", () => {
+
+    if (currentTime) {
+      currentTime.textContent =
+        formatTime(bgMusic.currentTime);
+    }
+
+    if (seekBar) {
+      seekBar.value = bgMusic.currentTime;
+    }
+
+  });
+
+}
+
+
+/* =====================================================
+   PROGRESS BAR / SEEK
+===================================================== */
+
+if (seekBar && bgMusic) {
+
+  seekBar.addEventListener("input", (e) => {
+
+    e.stopPropagation();
+
+    bgMusic.currentTime =
+      Number(seekBar.value);
+
+  });
+
+}
+
+
+/* =====================================================
+   REPEAT BUTTON
 ===================================================== */
 
 if (loopBtn && bgMusic) {
 
-  // Start with repeat enabled
+  // Start with repeat ON
   bgMusic.loop = true;
+
   loopBtn.classList.add("is-active");
-  loopBtn.setAttribute("aria-pressed", "true");
+
+  loopBtn.setAttribute(
+    "aria-pressed",
+    "true"
+  );
+
+  loopBtn.setAttribute(
+    "aria-label",
+    "Repeat is on"
+  );
+
+  loopBtn.setAttribute(
+    "title",
+    "Repeat: On"
+  );
+
 
   loopBtn.addEventListener("click", (e) => {
+
+    // VERY IMPORTANT:
+    // Don't let this click reach the flower system
     e.stopPropagation();
 
-    // Toggle loop
     bgMusic.loop = !bgMusic.loop;
 
+
     if (bgMusic.loop) {
-      // Repeat ON
+
       loopBtn.classList.add("is-active");
-      loopBtn.setAttribute("aria-pressed", "true");
-      loopBtn.setAttribute("aria-label", "Repeat is on");
-      loopBtn.setAttribute("title", "Repeat: On");
+
+      loopBtn.setAttribute(
+        "aria-pressed",
+        "true"
+      );
+
+      loopBtn.setAttribute(
+        "aria-label",
+        "Repeat is on"
+      );
+
+      loopBtn.setAttribute(
+        "title",
+        "Repeat: On"
+      );
 
     } else {
-      // Repeat OFF
+
       loopBtn.classList.remove("is-active");
-      loopBtn.setAttribute("aria-pressed", "false");
-      loopBtn.setAttribute("aria-label", "Repeat is off");
-      loopBtn.setAttribute("title", "Repeat: Off");
+
+      loopBtn.setAttribute(
+        "aria-pressed",
+        "false"
+      );
+
+      loopBtn.setAttribute(
+        "aria-label",
+        "Repeat is off"
+      );
+
+      loopBtn.setAttribute(
+        "title",
+        "Repeat: Off"
+      );
+
     }
+
   });
+
 }
 
   /* =====================================================
