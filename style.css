@@ -826,13 +826,13 @@ button:focus-visible,
 }
 
 /* =====================================================
-   MEMORIES PLANT
+   MEMORIES SAKURA TREE
    ---------------------------------------------------
-   Decorative plant with 3 leaves. Only .plant-leaf-link
-   is a real <a> — the other two are plain spans, purely
-   for looks. Angles/positions are eyeballed against a
-   180x200 box; nudge the per-leaf values below if the
-   leaves don't sit where you want on your screen.
+   A little cherry-blossom tree with 3 blossom clusters.
+   Only .sakura-blossom-link is a real <a> — the other two
+   are plain spans, purely for looks. Positions/angles are
+   eyeballed against a 200x220 box; nudge the per-element
+   values below if anything doesn't sit where you want.
 ===================================================== */
 .plant-section {
   display: flex;
@@ -842,13 +842,13 @@ button:focus-visible,
   margin: 30px auto 40px;
 }
 
-.plant {
+.sakura-tree {
   position: relative;
-  width: 180px;
-  height: 200px;
+  width: 200px;
+  height: 220px;
 }
 
-.plant-pot {
+.sakura-pot {
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -860,65 +860,100 @@ button:focus-visible,
   box-shadow: 0 8px 16px rgba(0,0,0,0.35);
 }
 
-.plant-stem {
+.sakura-trunk {
   position: absolute;
-  bottom: 56px;
+  bottom: 54px;
   left: 50%;
-  width: 5px;
-  height: 90px;
-  background: linear-gradient(180deg, #6a9c6f, #3f6b46);
-  border-radius: 3px;
-  transform: translateX(-50%);
+  width: 14px;
+  height: 96px;
+  background: linear-gradient(180deg, #8a5a3a, #5c3a22);
+  border-radius: 6px 6px 3px 3px;
+  transform: translateX(-50%) rotate(-2deg);
+  box-shadow: inset -3px 0 5px rgba(0,0,0,0.3);
 }
 
-.plant-leaf {
+.sakura-branch {
   position: absolute;
-  width: 60px;
-  height: 40px;
-  background: linear-gradient(135deg, #7ab182, #4d7a55);
-  border-radius: 0 100% 0 100%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  width: 68px;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #8a5a3a, #6b4428);
 }
 
-.plant-leaf-left {
-  bottom: 108px;
-  left: 20px;
-  transform: rotate(-25deg);
+.sakura-branch-left {
+  bottom: 132px;
+  left: 22px;
+  transform: rotate(-30deg);
 }
 
-.plant-leaf-top {
+.sakura-branch-right {
+  bottom: 140px;
+  right: 18px;
+  transform: rotate(26deg);
+}
+
+/* fluffy blossom cluster — the extra box-shadow blobs
+   create the "puff of flowers" look around a single shape */
+.sakura-blossom {
+  position: absolute;
+  width: 64px;
+  height: 54px;
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 35% 30%, #ffe3ec 0%, #f7b8cf 45%, #e88fb0 80%);
+  box-shadow:
+    18px 6px 0 -4px #f7b8cf,
+    -16px 10px 0 -6px #f3c7d9,
+    6px -14px 0 -8px #ffd7e6;
+}
+
+.sakura-blossom-left {
   bottom: 148px;
+  left: 2px;
+}
+
+.sakura-blossom-top {
+  bottom: 186px;
   left: 50%;
-  transform: translateX(-50%) scale(0.85);
+  transform: translateX(-50%) scale(0.9);
 }
 
 /* the clickable one — kept visually identical to the other
-   leaves so it isn't obviously the "special" one */
-.plant-leaf-link {
+   blossoms so it isn't obviously the "special" one */
+.sakura-blossom-link {
   display: block;
-  bottom: 118px;
-  right: 18px;
-  left: auto;
-  transform: rotate(30deg);
+  bottom: 148px;
+  right: -2px;
   cursor: pointer;
   transition: transform 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
 }
 
-.plant-leaf-link:hover,
-.plant-leaf-link:focus-visible {
-  transform: rotate(30deg) scale(1.12);
-  box-shadow: 0 6px 16px rgba(226, 138, 165, 0.45);
+.sakura-blossom-link:hover,
+.sakura-blossom-link:focus-visible {
+  transform: scale(1.12);
+  box-shadow:
+    0 6px 18px rgba(226, 138, 165, 0.5),
+    18px 6px 0 -4px #f7b8cf,
+    -16px 10px 0 -6px #f3c7d9,
+    6px -14px 0 -8px #ffd7e6;
 }
 
-.plant-leaf-shine {
+/* a couple of petals drifting down for atmosphere */
+.sakura-petal {
   position: absolute;
-  top: 6px;
-  left: 10px;
-  width: 14px;
-  height: 8px;
-  background: rgba(255,255,255,0.35);
-  border-radius: 50%;
-  filter: blur(1px);
+  width: 8px;
+  height: 6px;
+  background: #f3b6cf;
+  border-radius: 60% 0 60% 0;
+  opacity: 0.85;
+  animation: sakura-fall 4.5s ease-in-out infinite;
+}
+
+.sakura-petal-1 { top: 8px; left: 66px; animation-delay: 0s; }
+.sakura-petal-2 { top: 20px; right: 56px; animation-delay: 1.8s; }
+
+@keyframes sakura-fall {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.85; }
+  100% { transform: translateY(170px) translateX(-24px) rotate(180deg); opacity: 0; }
 }
 
 .plant-hint {
