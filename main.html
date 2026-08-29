@@ -46,13 +46,15 @@
          audio file and point bgMusic's src at it below -->
  <!-- MUSIC DISC & CONTROLLER -->
     <div class="disc-wrap" id="discWrap">
-      <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
-        <span class="disc-grooves" aria-hidden="true">
-          <span class="disc-label" aria-hidden="true">♪</span>
-          <span class="disc-hole" aria-hidden="true"></span>
-        </span>
-      </button>
-      <span class="disc-needle" id="discNeedle" aria-hidden="true"></span>
+      <div class="disc-stage">
+        <button type="button" class="music-disc" id="musicDiscButton" aria-pressed="false" aria-label="Play our song">
+          <span class="disc-grooves" aria-hidden="true">
+            <span class="disc-label" aria-hidden="true">♪</span>
+            <span class="disc-hole" aria-hidden="true"></span>
+          </span>
+        </button>
+        <span class="disc-needle" id="discNeedle" aria-hidden="true"></span>
+      </div>
       <p class="unlocked-hint" id="discHint">tap the disc to pause</p>
 
       <!-- AUDIO CONTROLLER -->
