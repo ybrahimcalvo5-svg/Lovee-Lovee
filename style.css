@@ -942,14 +942,11 @@ button:focus-visible,
 }
 
 /* bare branches, drawn as pseudo-elements off the trunk */
-/* bare branches, drawn as pseudo-elements off the trunk —
-   lengthened a touch so they still reach the leaves now that
-   the leaves sit further apart */
 .plant::before,
 .plant::after {
   content: "";
   position: absolute;
-  width: 112px;
+  width: 95px;
   height: 11px;
   border-radius: 5px;
   background: linear-gradient(90deg, #8a5a3a, #6b4428);
@@ -957,96 +954,74 @@ button:focus-visible,
 
 .plant::before {
   bottom: 185px;
-  left: 18px;
+  left: 31px;
   transform: rotate(-30deg);
 }
 
 .plant::after {
   bottom: 196px;
-  right: 10px;
+  right: 25px;
   transform: rotate(26deg);
 }
 
-/* a single pointed leaf shape — the classic CSS trick of an
-   oval with two opposite corners squared off, rotated to a
-   natural-looking angle, with a subtle center vein */
+/* fluffy blossom cluster — the extra box-shadow blobs
+   create the "puff of flowers" look around a single shape */
 .plant-leaf {
   position: absolute;
-  width: 78px;
-  height: 56px;
-  border-radius: 0% 100% 0% 100%;
-  background: linear-gradient(135deg, #bfe3a0 0%, #8ec26a 50%, #5f9a45 100%);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+  width: 90px;
+  height: 76px;
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 35% 30%, #ffe3ec 0%, #f7b8cf 45%, #e88fb0 80%);
+  box-shadow:
+    25px 8px 0 -6px #f7b8cf,
+    -22px 14px 0 -8px #f3c7d9,
+    8px -20px 0 -11px #ffd7e6;
   transition: transform 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft), filter 0.3s var(--ease-soft);
 }
 
-/* center vein running down the leaf */
-.plant-leaf::before {
-  content: "";
-  position: absolute;
-  top: 12%;
-  left: 12%;
-  width: 76%;
-  height: 2px;
-  background: rgba(255,255,255,0.35);
-  transform: rotate(45deg);
-  transform-origin: 0 0;
-  pointer-events: none;
-}
-
-/* every leaf reacts a little on hover, not just the link,
+/* every blossom reacts a little on hover, not just the link,
    so the tree feels alive to explore rather than just decorative */
 .plant-leaf:hover {
   filter: brightness(1.08);
 }
 
-/* Left leaf's stem corner (bottom-right, since border-radius
-   puts the pointed corners at top-left/bottom-right) is pinned
-   to the tip of the left branch — (25.5, 162.5) in the .plant
-   box — via transform-origin, so rotating it swings the blade
-   without ever detaching the stem from the branch. */
 .plant-leaf-left {
-  bottom: 163px;
-  left: -53px;
-  transform-origin: 100% 100%;
-  transform: rotate(-25deg);
+  bottom: 207px;
+  left: 3px;
 }
 
 .plant-leaf-left:hover {
-  transform: rotate(-32deg) scale(1.08);
+  transform: scale(1.08) rotate(-4deg);
 }
 
-/* Top leaf has no branch — it grows straight off the stem tip,
-   so its bottom-center is pinned to the top of .plant-stem. */
 .plant-leaf-top {
-  bottom: 210px;
-  left: 101px;
-  transform-origin: 50% 100%;
-  transform: rotate(-45deg) scale(0.9);
+  bottom: 260px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
 }
 
 .plant-leaf-top:hover {
-  transform: rotate(-45deg) scale(1);
+  transform: translateX(-50%) scale(1);
 }
 
 /* the clickable one — kept visually identical to the other
-   leaves so it isn't obviously the "special" one. Its stem
-   corner (top-left) is pinned to the right branch's tip —
-   (264, 177) in the .plant box. */
+   blossoms so it isn't obviously the "special" one */
 .plant-leaf-link {
   display: block;
-  bottom: 121px;
-  left: 264px;
-  transform-origin: 0% 0%;
-  transform: rotate(20deg);
+  bottom: 207px;
+  right: -3px;
   cursor: pointer;
   text-decoration: none;
 }
 
 .plant-leaf-link:hover,
 .plant-leaf-link:focus-visible {
-  transform: rotate(28deg) scale(1.14);
-  box-shadow: 0 8px 22px rgba(95, 154, 69, 0.5);
+  transform: scale(1.14) rotate(4deg);
+  box-shadow:
+    0 8px 22px rgba(226, 138, 165, 0.5),
+    25px 8px 0 -6px #f7b8cf,
+    -22px 14px 0 -8px #f3c7d9,
+    8px -20px 0 -11px #ffd7e6;
 }
 
 .plant-leaf-link:focus-visible {
@@ -1054,17 +1029,17 @@ button:focus-visible,
   outline-offset: 4px;
 }
 
-/* soft glossy highlight inside the special leaf — subtle
-   on purpose, so it still reads as "just another leaf" */
+/* soft glossy highlight inside the special blossom — subtle
+   on purpose, so it still reads as "just another blossom" */
 .plant-leaf-shine {
   position: absolute;
   inset: 8px;
-  border-radius: 0% 100% 0% 100%;
-  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.4), rgba(255,255,255,0) 60%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%);
   pointer-events: none;
 }
 
-/* a shed leaf per blossom, invisible until you hover it —
+/* a shed petal per blossom, invisible until you hover it —
    a small reward for noticing/poking at the tree */
 .plant-leaf::after {
   content: "";
@@ -1073,7 +1048,7 @@ button:focus-visible,
   left: 45%;
   width: 11px;
   height: 8px;
-  background: #8ec26a;
+  background: #f3b6cf;
   border-radius: 60% 0 60% 0;
   opacity: 0;
   pointer-events: none;
