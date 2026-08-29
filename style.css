@@ -373,7 +373,14 @@ button:focus-visible,
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.9s var(--ease-soft) 0.15s, visibility 0.9s var(--ease-soft) 0.15s;
-  padding: 24px;
+  padding: 24px 24px 70px;
+  /* .screen gives us position:fixed/inset:0/flex/align-items:center/
+     justify-content:center — override the flex axis + overflow here so
+     this page scrolls top-to-bottom instead of pinning to one screen */
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .main-screen.is-visible {
@@ -773,6 +780,158 @@ button:focus-visible,
 }
 
 /* =====================================================
+   PHOTO GALLERY PLACEHOLDERS
+===================================================== */
+.gallery-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(20px, 5vw, 48px);
+  width: min(1100px, 92vw);
+  margin: 20px auto 10px;
+}
+
+.photo-placeholder {
+  width: min(320px, 42vw);
+  min-width: 220px;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  border: 2px dashed rgba(247, 228, 234, 0.35);
+  background: rgba(255, 248, 243, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: border-color 0.3s var(--ease-soft), background 0.3s var(--ease-soft);
+}
+
+.photo-placeholder:hover {
+  border-color: var(--rose-soft);
+  background: rgba(255, 248, 243, 0.07);
+}
+
+.photo-placeholder-icon {
+  font-size: 34px;
+  opacity: 0.55;
+}
+
+.photo-placeholder-text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--blush);
+  opacity: 0.65;
+}
+
+/* =====================================================
+   MEMORIES PLANT
+   ---------------------------------------------------
+   Decorative plant with 3 leaves. Only .plant-leaf-link
+   is a real <a> — the other two are plain spans, purely
+   for looks. Angles/positions are eyeballed against a
+   180x200 box; nudge the per-leaf values below if the
+   leaves don't sit where you want on your screen.
+===================================================== */
+.plant-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: 30px auto 40px;
+}
+
+.plant {
+  position: relative;
+  width: 180px;
+  height: 200px;
+}
+
+.plant-pot {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 60px;
+  background: linear-gradient(160deg, #8a7142, #5c4a2a);
+  border-radius: 6px 6px 14px 14px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.35);
+}
+
+.plant-stem {
+  position: absolute;
+  bottom: 56px;
+  left: 50%;
+  width: 5px;
+  height: 90px;
+  background: linear-gradient(180deg, #6a9c6f, #3f6b46);
+  border-radius: 3px;
+  transform: translateX(-50%);
+}
+
+.plant-leaf {
+  position: absolute;
+  width: 60px;
+  height: 40px;
+  background: linear-gradient(135deg, #7ab182, #4d7a55);
+  border-radius: 0 100% 0 100%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.plant-leaf-left {
+  bottom: 108px;
+  left: 20px;
+  transform: rotate(-25deg);
+}
+
+.plant-leaf-top {
+  bottom: 148px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.85);
+}
+
+/* the clickable one — kept visually identical to the other
+   leaves so it isn't obviously the "special" one */
+.plant-leaf-link {
+  display: block;
+  bottom: 118px;
+  right: 18px;
+  left: auto;
+  transform: rotate(30deg);
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
+}
+
+.plant-leaf-link:hover,
+.plant-leaf-link:focus-visible {
+  transform: rotate(30deg) scale(1.12);
+  box-shadow: 0 6px 16px rgba(226, 138, 165, 0.45);
+}
+
+.plant-leaf-shine {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  width: 14px;
+  height: 8px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.plant-hint {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--blush);
+  opacity: 0.6;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+/* =====================================================
    LETTER OVERLAY
 ===================================================== */
 .letter-overlay {
@@ -964,6 +1123,9 @@ button:focus-visible,
   .keypad { grid-template-columns: repeat(3, 52px); gap: 12px; }
   .keypad button { width: 52px; height: 52px; }
   .letter-page { padding-top: 110px; }
+  .gallery-section { flex-direction: column; align-items: center; }
+  .photo-placeholder { width: 82vw; max-width: 340px; }
+  .plant { width: 140px; height: 160px; transform: scale(0.85); }
 }
 
 /* =====================================================
