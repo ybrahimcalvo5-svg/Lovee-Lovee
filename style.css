@@ -404,7 +404,12 @@ button:focus-visible,
   flex-wrap: wrap;
   padding: 26px 48px;
   border-bottom: 1.5px solid var(--gold);
-  background: transparent;
+  /* solid + blurred backdrop — without this, content scrolling underneath
+     a fixed nav shows straight through a transparent background, which
+     looks like the page design is "leaking" into the header on scroll */
+  background: linear-gradient(180deg, rgba(28, 10, 19, 0.94) 0%, rgba(28, 10, 19, 0.86) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.6s var(--ease-soft) 0.25s, transform 0.6s var(--ease-soft) 0.25s;
@@ -829,10 +834,11 @@ button:focus-visible,
    MEMORIES SAKURA TREE
    ---------------------------------------------------
    A little cherry-blossom tree with 3 blossom clusters.
-   Only .sakura-blossom-link is a real <a> — the other two
-   are plain spans, purely for looks. Positions/angles are
-   eyeballed against a 200x220 box; nudge the per-element
-   values below if anything doesn't sit where you want.
+   Only .plant-leaf-link is a real <a> (→ memories.html) —
+   the other two are plain spans, purely for looks.
+   Positions/angles are eyeballed against a 200x220 box;
+   nudge the per-element values below if anything doesn't
+   sit where you want.
 ===================================================== */
 .plant-section {
   display: flex;
@@ -842,13 +848,13 @@ button:focus-visible,
   margin: 30px auto 40px;
 }
 
-.sakura-tree {
+.plant {
   position: relative;
   width: 200px;
   height: 220px;
 }
 
-.sakura-pot {
+.plant-pot {
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -860,7 +866,7 @@ button:focus-visible,
   box-shadow: 0 8px 16px rgba(0,0,0,0.35);
 }
 
-.sakura-trunk {
+.plant-stem {
   position: absolute;
   bottom: 54px;
   left: 50%;
@@ -872,7 +878,10 @@ button:focus-visible,
   box-shadow: inset -3px 0 5px rgba(0,0,0,0.3);
 }
 
-.sakura-branch {
+/* bare branches, drawn as pseudo-elements off the trunk */
+.plant::before,
+.plant::after {
+  content: "";
   position: absolute;
   width: 68px;
   height: 8px;
@@ -880,13 +889,13 @@ button:focus-visible,
   background: linear-gradient(90deg, #8a5a3a, #6b4428);
 }
 
-.sakura-branch-left {
+.plant::before {
   bottom: 132px;
   left: 22px;
   transform: rotate(-30deg);
 }
 
-.sakura-branch-right {
+.plant::after {
   bottom: 140px;
   right: 18px;
   transform: rotate(26deg);
@@ -894,7 +903,7 @@ button:focus-visible,
 
 /* fluffy blossom cluster — the extra box-shadow blobs
    create the "puff of flowers" look around a single shape */
-.sakura-blossom {
+.plant-leaf {
   position: absolute;
   width: 64px;
   height: 54px;
@@ -906,12 +915,12 @@ button:focus-visible,
     6px -14px 0 -8px #ffd7e6;
 }
 
-.sakura-blossom-left {
+.plant-leaf-left {
   bottom: 148px;
   left: 2px;
 }
 
-.sakura-blossom-top {
+.plant-leaf-top {
   bottom: 186px;
   left: 50%;
   transform: translateX(-50%) scale(0.9);
@@ -919,16 +928,17 @@ button:focus-visible,
 
 /* the clickable one — kept visually identical to the other
    blossoms so it isn't obviously the "special" one */
-.sakura-blossom-link {
+.plant-leaf-link {
   display: block;
   bottom: 148px;
   right: -2px;
   cursor: pointer;
+  text-decoration: none;
   transition: transform 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
 }
 
-.sakura-blossom-link:hover,
-.sakura-blossom-link:focus-visible {
+.plant-leaf-link:hover,
+.plant-leaf-link:focus-visible {
   transform: scale(1.12);
   box-shadow:
     0 6px 18px rgba(226, 138, 165, 0.5),
@@ -937,8 +947,25 @@ button:focus-visible,
     6px -14px 0 -8px #ffd7e6;
 }
 
+.plant-leaf-link:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+/* soft glossy highlight inside the special blossom — subtle
+   on purpose, so it still reads as "just another blossom" */
+.plant-leaf-shine {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%);
+  pointer-events: none;
+}
+
 /* a couple of petals drifting down for atmosphere */
-.sakura-petal {
+.plant-stem::before,
+.plant-stem::after {
+  content: "";
   position: absolute;
   width: 8px;
   height: 6px;
@@ -948,8 +975,8 @@ button:focus-visible,
   animation: sakura-fall 4.5s ease-in-out infinite;
 }
 
-.sakura-petal-1 { top: 8px; left: 66px; animation-delay: 0s; }
-.sakura-petal-2 { top: 20px; right: 56px; animation-delay: 1.8s; }
+.plant-stem::before { top: -58px; left: 46px; animation-delay: 0s; }
+.plant-stem::after { top: -46px; left: -34px; animation-delay: 1.8s; }
 
 @keyframes sakura-fall {
   0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.85; }
