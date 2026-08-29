@@ -491,7 +491,7 @@ button:focus-visible,
   position: relative;
   width: min(1300px, 94vw);
   min-height: 60vh;
-  margin: 110px auto 40px;
+  margin: 130px auto 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -791,12 +791,13 @@ button:focus-visible,
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: clamp(20px, 5vw, 48px);
+  gap: clamp(28px, 6vw, 64px);
   width: min(1100px, 92vw);
-  margin: 20px auto 10px;
+  margin: 70px auto 60px;
 }
 
 .photo-placeholder {
+  position: relative;
   width: min(320px, 42vw);
   min-width: 220px;
   aspect-ratio: 4 / 3;
@@ -808,17 +809,62 @@ button:focus-visible,
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: border-color 0.3s var(--ease-soft), background 0.3s var(--ease-soft);
+  overflow: hidden;
+  transition: border-color 0.35s var(--ease-soft), background 0.35s var(--ease-soft),
+              transform 0.35s var(--ease-soft), box-shadow 0.35s var(--ease-soft);
 }
 
 .photo-placeholder:hover {
   border-color: var(--rose-soft);
   background: rgba(255, 248, 243, 0.07);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 18px 34px rgba(226, 138, 165, 0.2);
+}
+
+/* corner brackets that draw themselves in on hover, like a
+   camera viewfinder framing up the photo you'll drop in here */
+.photo-placeholder::before,
+.photo-placeholder::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--rose-soft);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-soft), transform 0.35s var(--ease-soft);
+}
+
+.photo-placeholder::before {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+  transform: translate(-6px, -6px);
+}
+
+.photo-placeholder::after {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+  transform: translate(6px, 6px);
+}
+
+.photo-placeholder:hover::before,
+.photo-placeholder:hover::after {
+  opacity: 0.9;
+  transform: translate(0, 0);
 }
 
 .photo-placeholder-icon {
   font-size: 34px;
   opacity: 0.55;
+  transition: transform 0.35s var(--ease-soft), opacity 0.35s var(--ease-soft);
+}
+
+.photo-placeholder:hover .photo-placeholder-icon {
+  transform: scale(1.15) rotate(-4deg);
+  opacity: 0.85;
 }
 
 .photo-placeholder-text {
@@ -828,6 +874,11 @@ button:focus-visible,
   letter-spacing: 0.04em;
   color: var(--blush);
   opacity: 0.65;
+  transition: opacity 0.35s var(--ease-soft);
+}
+
+.photo-placeholder:hover .photo-placeholder-text {
+  opacity: 0.9;
 }
 
 /* =====================================================
@@ -836,7 +887,7 @@ button:focus-visible,
    A little cherry-blossom tree with 3 blossom clusters.
    Only .plant-leaf-link is a real <a> (→ memories.html) —
    the other two are plain spans, purely for looks.
-   Positions/angles are eyeballed against a 200x220 box;
+   Positions/angles are eyeballed against a 280x310 box;
    nudge the per-element values below if anything doesn't
    sit where you want.
 ===================================================== */
@@ -844,14 +895,26 @@ button:focus-visible,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  margin: 30px auto 40px;
+  gap: 22px;
+  margin: 80px auto 90px;
 }
 
 .plant {
   position: relative;
-  width: 200px;
-  height: 220px;
+  width: 280px;
+  height: 310px;
+  --tree-scale: 1; /* mobile breakpoint below dials this down */
+  transform-origin: 50% 100%;
+  animation: tree-sway 6.5s ease-in-out infinite;
+}
+
+/* whole potted tree swaying gently, like a breeze — purely
+   ambient, gives the page a bit of life without needing input.
+   Reads --tree-scale each frame so the responsive size override
+   further down doesn't fight this animation over `transform`. */
+@keyframes tree-sway {
+  0%, 100% { transform: scale(var(--tree-scale)) rotate(-1.3deg); }
+  50% { transform: scale(var(--tree-scale)) rotate(1.3deg); }
 }
 
 .plant-pot {
@@ -859,23 +922,23 @@ button:focus-visible,
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 90px;
-  height: 60px;
+  width: 126px;
+  height: 84px;
   background: linear-gradient(160deg, #8a7142, #5c4a2a);
-  border-radius: 6px 6px 14px 14px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.35);
+  border-radius: 8px 8px 20px 20px;
+  box-shadow: 0 12px 22px rgba(0,0,0,0.35);
 }
 
 .plant-stem {
   position: absolute;
-  bottom: 54px;
+  bottom: 76px;
   left: 50%;
-  width: 14px;
-  height: 96px;
+  width: 20px;
+  height: 134px;
   background: linear-gradient(180deg, #8a5a3a, #5c3a22);
-  border-radius: 6px 6px 3px 3px;
+  border-radius: 8px 8px 4px 4px;
   transform: translateX(-50%) rotate(-2deg);
-  box-shadow: inset -3px 0 5px rgba(0,0,0,0.3);
+  box-shadow: inset -4px 0 7px rgba(0,0,0,0.3);
 }
 
 /* bare branches, drawn as pseudo-elements off the trunk */
@@ -883,21 +946,21 @@ button:focus-visible,
 .plant::after {
   content: "";
   position: absolute;
-  width: 68px;
-  height: 8px;
-  border-radius: 4px;
+  width: 95px;
+  height: 11px;
+  border-radius: 5px;
   background: linear-gradient(90deg, #8a5a3a, #6b4428);
 }
 
 .plant::before {
-  bottom: 132px;
-  left: 22px;
+  bottom: 185px;
+  left: 31px;
   transform: rotate(-30deg);
 }
 
 .plant::after {
-  bottom: 140px;
-  right: 18px;
+  bottom: 196px;
+  right: 25px;
   transform: rotate(26deg);
 }
 
@@ -905,46 +968,60 @@ button:focus-visible,
    create the "puff of flowers" look around a single shape */
 .plant-leaf {
   position: absolute;
-  width: 64px;
-  height: 54px;
+  width: 90px;
+  height: 76px;
   border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
   background: radial-gradient(circle at 35% 30%, #ffe3ec 0%, #f7b8cf 45%, #e88fb0 80%);
   box-shadow:
-    18px 6px 0 -4px #f7b8cf,
-    -16px 10px 0 -6px #f3c7d9,
-    6px -14px 0 -8px #ffd7e6;
+    25px 8px 0 -6px #f7b8cf,
+    -22px 14px 0 -8px #f3c7d9,
+    8px -20px 0 -11px #ffd7e6;
+  transition: transform 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft), filter 0.3s var(--ease-soft);
+}
+
+/* every blossom reacts a little on hover, not just the link,
+   so the tree feels alive to explore rather than just decorative */
+.plant-leaf:hover {
+  filter: brightness(1.08);
 }
 
 .plant-leaf-left {
-  bottom: 148px;
-  left: 2px;
+  bottom: 207px;
+  left: 3px;
+}
+
+.plant-leaf-left:hover {
+  transform: scale(1.08) rotate(-4deg);
 }
 
 .plant-leaf-top {
-  bottom: 186px;
+  bottom: 260px;
   left: 50%;
   transform: translateX(-50%) scale(0.9);
+}
+
+.plant-leaf-top:hover {
+  transform: translateX(-50%) scale(1);
 }
 
 /* the clickable one — kept visually identical to the other
    blossoms so it isn't obviously the "special" one */
 .plant-leaf-link {
   display: block;
-  bottom: 148px;
-  right: -2px;
+  bottom: 207px;
+  right: -3px;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
 }
 
 .plant-leaf-link:hover,
 .plant-leaf-link:focus-visible {
-  transform: scale(1.12);
+  transform: scale(1.14) rotate(4deg);
   box-shadow:
-    0 6px 18px rgba(226, 138, 165, 0.5),
-    18px 6px 0 -4px #f7b8cf,
-    -16px 10px 0 -6px #f3c7d9,
-    6px -14px 0 -8px #ffd7e6;
+    0 8px 22px rgba(226, 138, 165, 0.5),
+    25px 8px 0 -6px #f7b8cf,
+    -22px 14px 0 -8px #f3c7d9,
+    8px -20px 0 -11px #ffd7e6;
 }
 
 .plant-leaf-link:focus-visible {
@@ -956,31 +1033,51 @@ button:focus-visible,
    on purpose, so it still reads as "just another blossom" */
 .plant-leaf-shine {
   position: absolute;
-  inset: 6px;
+  inset: 8px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%);
   pointer-events: none;
 }
 
-/* a couple of petals drifting down for atmosphere */
+/* a shed petal per blossom, invisible until you hover it —
+   a small reward for noticing/poking at the tree */
+.plant-leaf::after {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 45%;
+  width: 11px;
+  height: 8px;
+  background: #f3b6cf;
+  border-radius: 60% 0 60% 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.plant-leaf:hover::after,
+.plant-leaf-link:focus-visible::after {
+  animation: sakura-fall 1.3s ease-in forwards;
+}
+
+/* a couple of petals drifting down for atmosphere, always-on */
 .plant-stem::before,
 .plant-stem::after {
   content: "";
   position: absolute;
-  width: 8px;
-  height: 6px;
+  width: 11px;
+  height: 8px;
   background: #f3b6cf;
   border-radius: 60% 0 60% 0;
   opacity: 0.85;
-  animation: sakura-fall 4.5s ease-in-out infinite;
+  animation: sakura-fall 5s ease-in-out infinite;
 }
 
-.plant-stem::before { top: -58px; left: 46px; animation-delay: 0s; }
-.plant-stem::after { top: -46px; left: -34px; animation-delay: 1.8s; }
+.plant-stem::before { top: -82px; left: 64px; animation-delay: 0s; }
+.plant-stem::after { top: -64px; left: -48px; animation-delay: 2.1s; }
 
 @keyframes sakura-fall {
   0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.85; }
-  100% { transform: translateY(170px) translateX(-24px) rotate(180deg); opacity: 0; }
+  100% { transform: translateY(230px) translateX(-32px) rotate(180deg); opacity: 0; }
 }
 
 .plant-hint {
@@ -1187,7 +1284,7 @@ button:focus-visible,
   .letter-page { padding-top: 110px; }
   .gallery-section { flex-direction: column; align-items: center; }
   .photo-placeholder { width: 82vw; max-width: 340px; }
-  .plant { width: 140px; height: 160px; transform: scale(0.85); }
+  .plant { width: 196px; height: 224px; --tree-scale: 0.85; }
 }
 
 /* =====================================================
