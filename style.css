@@ -768,7 +768,7 @@ button:focus-visible,
   box-shadow: 0 2px 5px rgba(0,0,0,0.45);
 }
 
-.music-disc.is-playing + .disc-needle {
+.disc-needle.is-playing {
   transform: rotate(-14deg);
 }
 
