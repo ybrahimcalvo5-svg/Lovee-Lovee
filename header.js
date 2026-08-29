@@ -15,11 +15,7 @@
      "key" should match the data-nav-key on that page's
      <body> tag, so the current page's nav item lights up.
   ===================================================== */
-  const NAV_ITEMS = [
-    { label: "I",    href: "i.html",    key: "i" },
-    { label: "LOVE", href: "love.html", key: "love" },
-    { label: "YOU",  href: "you.html",  key: "you" },
-  ];
+  const NAV_ITEMS = [];
 
   const BRAND = {
     small: "For my",
