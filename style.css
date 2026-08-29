@@ -1009,11 +1009,11 @@ button:focus-visible,
   bottom: 163px;
   left: -53px;
   transform-origin: 100% 100%;
-  transform: rotate(-30deg);
+  transform: rotate(-25deg);
 }
 
 .plant-leaf-left:hover {
-  transform: rotate(-37deg) scale(1.08);
+  transform: rotate(-32deg) scale(1.08);
 }
 
 /* Top leaf has no branch — it grows straight off the stem tip,
@@ -1022,11 +1022,11 @@ button:focus-visible,
   bottom: 210px;
   left: 101px;
   transform-origin: 50% 100%;
-  transform: rotate(-38deg) scale(0.9);
+  transform: rotate(-45deg) scale(0.9);
 }
 
 .plant-leaf-top:hover {
-  transform: rotate(-38deg) scale(1);
+  transform: rotate(-45deg) scale(1);
 }
 
 /* the clickable one — kept visually identical to the other
@@ -1038,14 +1038,14 @@ button:focus-visible,
   bottom: 121px;
   left: 264px;
   transform-origin: 0% 0%;
-  transform: rotate(26deg);
+  transform: rotate(20deg);
   cursor: pointer;
   text-decoration: none;
 }
 
 .plant-leaf-link:hover,
 .plant-leaf-link:focus-visible {
-  transform: rotate(34deg) scale(1.14);
+  transform: rotate(28deg) scale(1.14);
   box-shadow: 0 8px 22px rgba(95, 154, 69, 0.5);
 }
 
