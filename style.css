@@ -632,6 +632,8 @@ button:focus-visible,
    MUSIC DISC
 ===================================================== */
 .disc-wrap {
+  position: relative;
+  z-index: 6;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -701,6 +703,49 @@ button:focus-visible,
   height: 10px;
   border-radius: 50%;
   background: var(--cream);
+}
+
+/* vinyl needle / tonearm — rests lifted off the record,
+   lowers onto it while the song is playing */
+.disc-needle {
+  position: absolute;
+  top: -14px;
+  right: 6px;
+  width: 92px;
+  height: 10px;
+  transform-origin: 88% 25%;
+  transform: rotate(-28deg);
+  transition: transform 0.5s var(--ease-soft);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.disc-needle::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #c9a45c, #8a7142);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+}
+
+.disc-needle::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3a3a3a;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.45);
+}
+
+.music-disc.is-playing + .disc-needle {
+  transform: rotate(9deg);
 }
 
 /* =====================================================
