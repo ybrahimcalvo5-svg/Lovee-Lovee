@@ -640,6 +640,12 @@ button:focus-visible,
   gap: 16px;
 }
 
+.disc-stage {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
 .music-disc {
   position: relative;
   width: 200px;
@@ -706,18 +712,21 @@ button:focus-visible,
 }
 
 /* vinyl needle / tonearm — rests lifted off the record,
-   lowers onto it while the song is playing */
+   lowers onto it while the song is playing.
+   Positioned relative to .disc-stage (the 200x200 box
+   around the disc), NOT .disc-wrap, so it stays locked
+   to the disc regardless of how wide the player is. */
 .disc-needle {
   position: absolute;
-  top: -14px;
-  right: 6px;
-  width: 92px;
-  height: 10px;
-  transform-origin: 88% 25%;
-  transform: rotate(-28deg);
+  top: -10px;
+  right: -10px;
+  width: 130px;
+  height: 8px;
+  transform-origin: 92% 30%;
+  transform: rotate(-38deg);
   transition: transform 0.5s var(--ease-soft);
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 .disc-needle::before {
@@ -745,7 +754,7 @@ button:focus-visible,
 }
 
 .music-disc.is-playing + .disc-needle {
-  transform: rotate(9deg);
+  transform: rotate(14deg);
 }
 
 /* =====================================================
