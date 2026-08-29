@@ -8,6 +8,7 @@
 const musicDiscButton = document.getElementById("musicDiscButton");
 const bgMusic = document.getElementById("bgMusic");
 const discHint = document.getElementById("discHint");
+const discNeedle = document.getElementById("discNeedle");
 
 const seekBar = document.getElementById("seekBar");
 const currentTime = document.getElementById("currentTime");
@@ -73,6 +74,7 @@ if (musicDiscButton && bgMusic) {
   /* Keep disc animation synced with the actual audio */
   bgMusic.addEventListener("play", () => {
     musicDiscButton.classList.add("is-playing");
+    if (discNeedle) discNeedle.classList.add("is-playing");
 
     musicDiscButton.setAttribute(
       "aria-pressed",
@@ -93,6 +95,7 @@ if (musicDiscButton && bgMusic) {
 
   bgMusic.addEventListener("pause", () => {
     musicDiscButton.classList.remove("is-playing");
+    if (discNeedle) discNeedle.classList.remove("is-playing");
 
     musicDiscButton.setAttribute(
       "aria-pressed",
