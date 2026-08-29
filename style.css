@@ -716,14 +716,29 @@ button:focus-visible,
    Positioned relative to .disc-stage (the 200x200 box
    around the disc), NOT .disc-wrap, so it stays locked
    to the disc regardless of how wide the player is. */
+
+/* the fixed mount the tonearm pivots from — this is what
+   makes the needle look attached rather than floating */
+.disc-needle-mount {
+  position: absolute;
+  top: -2px;
+  right: -12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: linear-gradient(160deg, #4a4a4a, #262626);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
 .disc-needle {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 130px;
+  top: 2px;
+  right: -4px;
+  width: 118px;
   height: 8px;
-  transform-origin: 92% 30%;
-  transform: rotate(-38deg);
+  transform-origin: 92% 50%;
+  transform: rotate(-14deg);
   transition: transform 0.5s var(--ease-soft);
   pointer-events: none;
   z-index: 2;
@@ -754,7 +769,7 @@ button:focus-visible,
 }
 
 .music-disc.is-playing + .disc-needle {
-  transform: rotate(14deg);
+  transform: rotate(7deg);
 }
 
 /* =====================================================
