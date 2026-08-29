@@ -416,7 +416,7 @@ Ybrahim ♥`;
 
     if (flowerField) {
       document.addEventListener("click", (e) => {
-        if (e.target.closest(".site-nav")) return;
+        if (e.target.closest(".site-nav") || e.target.closest("#discWrap")) return;
         flowerField.spawnFlowerAt(e.clientX, e.clientY);
 
         clickedFlowerCount++;
