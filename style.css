@@ -738,7 +738,7 @@ button:focus-visible,
   width: 118px;
   height: 8px;
   transform-origin: 92% 50%;
-  transform: rotate(-14deg);
+  transform: rotate(7deg);
   transition: transform 0.5s var(--ease-soft);
   pointer-events: none;
   z-index: 2;
@@ -769,7 +769,7 @@ button:focus-visible,
 }
 
 .music-disc.is-playing + .disc-needle {
-  transform: rotate(7deg);
+  transform: rotate(-14deg);
 }
 
 /* =====================================================
@@ -958,6 +958,9 @@ button:focus-visible,
   .stage { margin-top: 150px; flex-direction: column; gap: 32px; }
   .envelope-button { width: 90vw; max-width: 380px; height: 62vw; max-height: 254px; }
   .music-disc { width: 160px; height: 160px; }
+  .disc-stage { width: 160px; height: 160px; }
+  .disc-needle-mount { top: -2px; right: -10px; width: 17px; height: 17px; }
+  .disc-needle { top: 2px; right: -3px; width: 96px; height: 7px; }
   .keypad { grid-template-columns: repeat(3, 52px); gap: 12px; }
   .keypad button { width: 52px; height: 52px; }
   .letter-page { padding-top: 110px; }
